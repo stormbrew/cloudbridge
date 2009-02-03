@@ -1,0 +1,6 @@
+CloudBridge
+---
+- Bridges gap between web frontend and backend by allowing each to connect to it. It then does matchmaking on the connections (using Host header)
+  to decide which backend to give to which frontend.
+- This avoids the problem of starving or overfeeding a backend because of poor metrics -- the backend knows damn well what it can handle,
+  and only asks for what it can take.
