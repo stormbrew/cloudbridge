@@ -1,0 +1,193 @@
+// !$*UTF8*$!
+{
+	08FB7793FE84155DC02AAC07 /* Project object */ = {
+		activeBuildConfigurationName = Debug;
+		activeExecutable = BF2299450F3B93BC00B40845 /* cloudbridge-xc */;
+		activeTarget = 8DD76F620486A84900D96B5E /* cloudbridge-xc */;
+		addToTargets = (
+			8DD76F620486A84900D96B5E /* cloudbridge-xc */,
+		);
+		breakpoints = (
+			BF2299E20F3BA89300B40845 /* cloudbridge.cpp:54 */,
+			BF2299F80F3BAB0E00B40845 /* buffered_connection.hpp:178 */,
+			BF2299FF0F3BAB4400B40845 /* buffered_connection.hpp:95 */,
+		);
+		codeSenseManager = BF2299490F3B93CB00B40845 /* Code sense */;
+		executables = (
+			BF2299450F3B93BC00B40845 /* cloudbridge-xc */,
+		);
+		perUserDictionary = {
+			PBXConfiguration.PBXFileTableDataSource3.PBXFileTableDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					341,
+					20,
+					48,
+					43,
+					43,
+					20,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+					PBXFileDataSource_Target_ColumnID,
+				);
+			};
+			PBXPerProjectTemplateStateSaveDate = 255580668;
+			PBXWorkspaceStateSaveDate = 255580668;
+		};
+		sourceControlManager = BF2299480F3B93CB00B40845 /* Source Control */;
+		userBuildSettings = {
+		};
+	};
+	8DD76F620486A84900D96B5E /* cloudbridge-xc */ = {
+		activeExec = 0;
+		executables = (
+			BF2299450F3B93BC00B40845 /* cloudbridge-xc */,
+		);
+	};
+	BF2299450F3B93BC00B40845 /* cloudbridge-xc */ = {
+		isa = PBXExecutable;
+		activeArgIndices = (
+		);
+		argumentStrings = (
+		);
+		autoAttachOnCrash = 1;
+		breakpointsEnabled = 0;
+		configStateDict = {
+		};
+		customDataFormattersEnabled = 1;
+		debuggerPlugin = GDBDebugging;
+		disassemblyDisplayState = 0;
+		dylibVariantSuffix = "";
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		libgmallocEnabled = 0;
+		name = "cloudbridge-xc";
+		savedGlobals = {
+		};
+		sourceDirectories = (
+		);
+		variableFormatDictionary = {
+			$cs = 1;
+			$ds = 1;
+			$eax = 1;
+			$ebp = 1;
+			$ebx = 1;
+			$ecx = 1;
+			$edi = 1;
+			$edx = 1;
+			$eflags = 1;
+			$eip = 1;
+			$es = 1;
+			$esi = 1;
+			$esp = 1;
+			$gs = 1;
+			$mm0 = 1;
+			$mm1 = 1;
+			$mm2 = 1;
+			$mm3 = 1;
+			$mm4 = 1;
+			$mm5 = 1;
+			$mm6 = 1;
+			$mm7 = 1;
+			$mxcsr = 1;
+			$ss = 1;
+			$xmm0 = 1;
+			$xmm1 = 1;
+			$xmm2 = 1;
+			$xmm3 = 1;
+			$xmm4 = 1;
+			$xmm5 = 1;
+			$xmm6 = 1;
+			$xmm7 = 1;
+		};
+	};
+	BF2299480F3B93CB00B40845 /* Source Control */ = {
+		isa = PBXSourceControlManager;
+		fallbackIsa = XCSourceControlManager;
+		isSCMEnabled = 0;
+		scmConfiguration = {
+		};
+	};
+	BF2299490F3B93CB00B40845 /* Code sense */ = {
+		isa = PBXCodeSenseManager;
+		indexTemplatePath = "";
+	};
+	BF22994C0F3B93E900B40845 /* buffered_connection.hpp */ = {
+		isa = PBXFileReference;
+		fileEncoding = 4;
+		lastKnownFileType = sourcecode.cpp.h;
+		name = buffered_connection.hpp;
+		path = /Users/graham/code/buffered_connection.hpp;
+		sourceTree = "<absolute>";
+	};
+	BF22994D0F3B93E900B40845 /* cloudbridge.cpp */ = {
+		isa = PBXFileReference;
+		fileEncoding = 4;
+		lastKnownFileType = sourcecode.cpp.cpp;
+		name = cloudbridge.cpp;
+		path = /Users/graham/code/cloudbridge.cpp;
+		sourceTree = "<absolute>";
+	};
+	BF2299E20F3BA89300B40845 /* cloudbridge.cpp:54 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = BF22994D0F3B93E900B40845 /* cloudbridge.cpp */;
+		functionName = "main()";
+		hitCount = 1;
+		ignoreCount = 0;
+		lineNumber = 54;
+		location = "cloudbridge-xc";
+		modificationTime = 255568433.87665;
+		state = 1;
+	};
+	BF2299F80F3BAB0E00B40845 /* buffered_connection.hpp:178 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = BF22994C0F3B93E900B40845 /* buffered_connection.hpp */;
+		functionName = "~buffered_connection()";
+		hitCount = 1;
+		ignoreCount = 0;
+		lineNumber = 178;
+		location = "cloudbridge-xc";
+		modificationTime = 255568680.15834;
+		state = 1;
+	};
+	BF2299FF0F3BAB4400B40845 /* buffered_connection.hpp:95 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = BF22994C0F3B93E900B40845 /* buffered_connection.hpp */;
+		functionName = "handle_shutdown()";
+		hitCount = 1;
+		ignoreCount = 0;
+		lineNumber = 95;
+		location = "cloudbridge-xc";
+		modificationTime = 255568720.274288;
+		state = 1;
+	};
+}
