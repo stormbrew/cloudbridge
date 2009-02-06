@@ -318,14 +318,6 @@
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
 										<string>buffered_connection.hpp</string>
-										<key>_historyCapacity</key>
-										<integer>0</integer>
-										<key>bookmark</key>
-										<string>BF229A040F3BAB7200B40845</string>
-										<key>history</key>
-										<array>
-											<string>BF2299520F3B940200B40845</string>
-										</array>
 									</dict>
 									<key>SplitCount</key>
 									<string>1</string>
@@ -384,9 +376,9 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>BF22995E0F3B94D500B40845</string>
+				<string>BF1CDA7A0F3BDA010020001F</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
-				<string>BF22995F0F3B94D500B40845</string>
+				<string>BF1CDA7B0F3BDA010020001F</string>
 				<string>1CE0B20306471E060097A5F4</string>
 				<string>1CE0B20506471E060097A5F4</string>
 			</array>
@@ -520,12 +512,8 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>BF2299760F3B957400B40845</string>
-		<string>BF2299770F3B957400B40845</string>
-		<string>BF2299540F3B940200B40845</string>
-		<string>/Users/graham/code/cloudbridge/cloudbridge-xc/cloudbridge-xc.xcodeproj</string>
-		<string>1C78EAAD065D492600B07095</string>
 		<string>1CD10A99069EF8BA00B06720</string>
+		<string>/Users/graham/code/cloudbridge/cloudbridge-xc.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
 	<string>-1039 187 788 504 -1280 0 1280 800 </string>
@@ -649,8 +637,8 @@
 										<string>yes</string>
 										<key>sizes</key>
 										<array>
-											<string>{{0, 0}, {385, 328}}</string>
-											<string>{{385, 0}, {461, 328}}</string>
+											<string>{{0, 0}, {386, 351}}</string>
+											<string>{{386, 0}, {460, 351}}</string>
 										</array>
 									</dict>
 									<key>VerticalSplitView</key>
@@ -665,8 +653,8 @@
 										<string>yes</string>
 										<key>sizes</key>
 										<array>
-											<string>{{0, 0}, {846, 328}}</string>
-											<string>{{0, 328}, {846, 348}}</string>
+											<string>{{0, 0}, {846, 351}}</string>
+											<string>{{0, 351}, {846, 325}}</string>
 										</array>
 									</dict>
 								</dict>
@@ -693,15 +681,13 @@
 									<array>
 										<string>Name</string>
 										<real>190</real>
-										<string>Type</string>
-										<real>84</real>
 										<string>Value</string>
 										<real>85</real>
 										<string>Summary</string>
-										<real>161</real>
+										<real>160</real>
 									</array>
 									<key>Frame</key>
-									<string>{{385, 0}, {461, 328}}</string>
+									<string>{{386, 0}, {460, 351}}</string>
 									<key>RubberWindowFrame</key>
 									<string>467 182 846 717 0 0 1680 1028 </string>
 								</dict>
@@ -729,13 +715,13 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1CD10A99069EF8BA00B06720</string>
-				<string>BF2299610F3B94D500B40845</string>
+				<string>BF1CDA7C0F3BDA010020001F</string>
 				<string>1C162984064C10D400B95A72</string>
-				<string>BF2299620F3B94D500B40845</string>
-				<string>BF2299630F3B94D500B40845</string>
-				<string>BF2299640F3B94D500B40845</string>
-				<string>BF2299650F3B94D500B40845</string>
-				<string>BF2299660F3B94D500B40845</string>
+				<string>BF1CDA7D0F3BDA010020001F</string>
+				<string>BF1CDA7E0F3BDA010020001F</string>
+				<string>BF1CDA7F0F3BDA010020001F</string>
+				<string>BF1CDA800F3BDA010020001F</string>
+				<string>BF1CDA810F3BDA010020001F</string>
 			</array>
 			<key>ToolbarConfiguration</key>
 			<string>xcode.toolbar.config.debugV3</string>
