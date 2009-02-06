@@ -1,5 +1,6 @@
 #include <tr1/memory>
 #include <set>
+#include <list>
 #include <vector>
 #include <algorithm>
 #include <string>
@@ -30,6 +31,7 @@ public:
 	typedef std::tr1::shared_ptr<buffered_connection> ptr;
 	typedef std::tr1::weak_ptr<buffered_connection> weak_ptr;
 	typedef std::set<ptr> connection_pool;
+	typedef std::list<ptr> connection_list;
 	
 	typedef std::tr1::shared_ptr<buffered_handler_base> client_handler_ptr;
 	
@@ -44,6 +46,7 @@ private:
 	bool remote_shutdown; // shutdown initiated by remote endpoint.
 	
 	static connection_pool connections;
+	static connection_list closed_connections;
 	
 	client_handler_ptr client_handler;
 	
@@ -89,19 +92,27 @@ protected:
 	
 	void handle_shutdown()
 	{
-		if (local_shutdown && remote_shutdown)
+		if (socket == -1)
 		{
+			// socket already closed, do nothing.
+			
+		} else if (local_shutdown && remote_shutdown) {
 			// socket is completely shut down, so close it.
 			client_handler->socket_close(*this, 0);
 			ev_io_stop(loop, &write_watcher);
 			ev_io_stop(loop, &read_watcher);
-			connections.erase(shared_from_this());
+			close(socket);
+			socket = -1;
+			closed_connections.push_back(shared_from_this());
 			
 		} else if (local_shutdown) {
-			// socket has been requested to shut down (our write pipe closed), so we
-			// stop writing to it.
-			ev_io_stop(loop, &write_watcher);
-			write_buffer.drain();
+			// socket has been requested to shut down (our write pipe closed), so once
+			// we've written everything in our buffer to it we shut it down.
+			if (write_buffer.read_begin() == write_buffer.read_end())
+			{
+				ev_io_stop(loop, &write_watcher);
+				::shutdown(socket, SHUT_WR);
+			}
 			
 		} else if (remote_shutdown) {
 			// remote and is no longer listening to its read end (our write end), so we trigger
@@ -113,10 +124,16 @@ protected:
 	
 	void error_close(int err)
 	{
-		client_handler->socket_close(*this, err);
-		ev_io_stop(loop, &write_watcher);
-		ev_io_stop(loop, &read_watcher);
-		connections.erase(shared_from_this());
+		if (socket != -1)
+		{
+			local_shutdown = remote_shutdown = true;
+			client_handler->socket_close(*this, err);
+			ev_io_stop(loop, &write_watcher);
+			ev_io_stop(loop, &read_watcher);
+			close(socket);
+			socket = -1;
+			closed_connections.push_back(shared_from_this());
+		}
 	}
 	
 	void handle(int revents)
@@ -173,23 +190,23 @@ protected:
 	}
 	
 public:
-	~buffered_connection()
-	{
-		// close the connection outright
-		ev_io_stop(loop, &read_watcher);
-		evx_clean(&read_watcher);
-		
-		ev_io_stop(loop, &write_watcher);
-		evx_clean(&write_watcher);
-		
-		close(socket);
-	}
-
 	static ptr create_connection(struct ev_loop *loop, int socket, client_handler_ptr client_handler)
 	{
 		return *connections.insert(connections.begin(), ptr(new buffered_connection(loop, socket, client_handler)));
 	}
 	
+	~buffered_connection()
+	{
+		// close the connection outright
+		evx_clean(&read_watcher);
+		evx_clean(&write_watcher);
+	}
+	
+	bool closed() const
+	{
+		return socket == -1;
+	}
+
 	void shutdown()
 	{
 		// set the shutdown flag and then encourage writing so the buffer is flushed properly.
@@ -211,12 +228,48 @@ public:
 		return read_buffer.set_read_begin(new_begin);
 	}
 	
+	// changes the handler for this connection. If there is data to be read on the
+	// read buffer, it then notifies the handler of that fact.
+	void set_client_handler(client_handler_ptr handler)
+	{
+		client_handler = handler;
+		if (read_begin() != read_end())
+		{
+			client_handler->data_readable(*this);
+		}
+	}
+	
+	template <typename tClientHandler>
+	std::tr1::shared_ptr<tClientHandler> get_client_handler()
+	{
+		return std::tr1::dynamic_pointer_cast<tClientHandler>(client_handler);
+	}
+	
+	// attempts to read a single line from the buffer starting at it and returns an iterator
+	// to one past the end of the line (including delimiter). Puts the line (excluding delimiter)
+	// in str. If there is no full line in the buffer, returns it.
+	// Note that this does not advance the read buffer itself. You still need to call set_read_begin
+	// with the new iterator position.
+	iterator readline(iterator it, std::string &str, const std::string &linedelim = "\r\n")
+	{
+		iterator delim = std::search(it, read_end(), linedelim.begin(), linedelim.end());
+		if (delim != read_end())
+		{
+			str = std::string(it, delim);
+			return delim + linedelim.length();
+		}
+		return it;
+	}
+	
 	template <typename tIter>
 	void write(tIter begin, tIter end)
 	{
-		buffer::range write_space = write_buffer.prepare_write(end - begin);
-		std::copy(begin, end, write_space.first);
-		ev_io_start(loop, &write_watcher);
+		if (!remote_shutdown) // the other end isn't listening anymore, don't write anything.
+		{
+			buffer::range write_space = write_buffer.prepare_write(end - begin);
+			std::copy(begin, end, write_space.first);
+			ev_io_start(loop, &write_watcher);
+		}
 	}
 	
 	void write(const char *str)
