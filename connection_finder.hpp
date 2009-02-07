@@ -1,29 +1,65 @@
 #ifndef __CONNECTION_FINDER_GUARD__
 #define __CONNECTION_FINDER_GUARD__
 
+#include <list>
+#include <tr1/unordered_map>
+
 #include "evx/buffered_connection.hpp"
 
-#include "listen_handler.hpp"
+class connection_pool;
 
 // this class is a state machine class that matches itself to another connection_finder class
-// based on the first line of text passed in to socket. Two sockets with the same first line
-// will be matched, and then their handlers will be replaced with the chat_handler class
-// that passes messages back and forth between them.
+// based on the header data passed to the connection. It then, when a match is made, replaces itself
+// with a chat_handler to do the actual bridging of the connection.
 class connection_finder : public evx::buffered_handler_base
 {
 private:
-	std::tr1::shared_ptr<listen_handler::connection_map> pool;
-	std::tr1::shared_ptr<std::string> mapped;
+	std::tr1::shared_ptr<connection_pool> pool;
+	bool mapped;
 	
-public:	
-	connection_finder(std::tr1::shared_ptr<listen_handler::connection_map> c_pool)
-	 : pool(c_pool)
-	{}
+	std::string method, url;
+	std::list<std::pair<std::string, std::string> > headers;
+	
+	bool read_headers(evx::buffered_connection &con);
 	
 	void morph(evx::buffered_connection &this_con, evx::buffered_connection::ptr other_con);
+	void error(evx::buffered_connection &con, int error_number, const std::string &name, const std::string &text);
+
+public:	
+	connection_finder(std::tr1::shared_ptr<connection_pool> c_pool)
+	 : pool(c_pool), mapped(false)
+	{}
 	
 	void data_readable(evx::buffered_connection &con);
 	void socket_shutdown(evx::buffered_connection &con);
 	void socket_close(evx::buffered_connection &con, int err);
 };
+
+// this class acts as a connection pool that helps identify matching connections. It has a list
+// of bridge requests and client requests and does the work of registering them and putting them together.
+class connection_pool
+{
+public:
+	typedef std::tr1::shared_ptr<connection_pool> ptr;
+	typedef evx::buffered_connection::ptr connection;
+	
+private:
+	typedef evx::buffered_connection::weak_ptr weak_connection;
+	typedef std::list<weak_connection> connection_list;
+	typedef std::tr1::unordered_map<std::string, connection_list> connection_host_map;
+	
+	connection_host_map client_pool;
+	connection_host_map bridge_pool;
+	
+	connection find_in(const std::string &host, connection_host_map &map);
+	void register_in(const std::string &host, connection con, connection_host_map &map);
+	
+public:
+	connection find_client(const std::string &host) { return find_in(host, client_pool); }
+	connection find_bridge(const std::string &host) { return find_in(host, bridge_pool); }
+	
+	void register_client(const std::string &host, connection con) { register_in(host, con, client_pool); }
+	void register_bridge(const std::string &host, connection con) { register_in(host, con, bridge_pool); }
+};
+
 #endif
