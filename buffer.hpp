@@ -1,3 +1,9 @@
+#ifndef __BUFFER_INCLUDE_GUARD__
+#define __BUFFER_INCLUDE_GUARD__
+
+#include <vector>
+#include <memory>
+
 class buffer : protected std::vector<char>
 {
 public:
@@ -9,7 +15,7 @@ private:
 	iterator read_pos;
 	
 public:
-	buffer() 
+	buffer()
 	 : read_pos(begin())
 	{}
 	
@@ -20,13 +26,8 @@ public:
 	//  buffer_range output = buffer.prepare_write(1024);
 	//  count = read(fd, &*output.first, 1024);
 	//  set_write_end(output.first + count);
-	range prepare_write(size_t count)
-	{
-		size_t relative_pos = read_pos - begin();
-		resize(size() + count);
-		read_pos = begin() + relative_pos;
-		return range(end() - count, end());
-	}
+	range prepare_write(size_t count);
+	
 	// Truncates the buffer because your write buffer was larger than needed to store available
 	// data.
 	void set_write_end(iterator end)
@@ -60,3 +61,4 @@ public:
 		read_pos = begin();
 	}
 };
+#endif

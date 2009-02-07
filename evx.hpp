@@ -1,7 +1,7 @@
 #include <ev.h>
 
-#ifndef __EVX_INCLUDE_GAURD__
-#define __EVX_INCLUDE_GAURD__
+#ifndef __EVX_INCLUDE_GUARD__
+#define __EVX_INCLUDE_GUARD__
 
 template <typename tWatcher>
 struct evx_watcher;

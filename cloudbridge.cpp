@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <map>
+#include <string>
 #include <tr1/unordered_set>
 
 #include "evx.hpp"
@@ -111,6 +112,8 @@ public:
 			// update read buffer position
 			con.set_read_begin(it);
 			
+			printf("Incoming connection mapped to %s\n", line.c_str());
+			
 			// see if there's already a connection with this name attached
 			listen_handler::connection_map::iterator it = pool->find(line);
 			if (it != pool->end())
@@ -128,7 +131,7 @@ public:
 				}
 			}
 			(*pool)[line] = con.shared_from_this();
-			mapped = new std::string(line);
+			mapped = std::tr1::shared_ptr<std::string>(new std::string(line));
 		}
 	}
 	void socket_shutdown(buffered_connection &con)
