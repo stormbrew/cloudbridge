@@ -6,8 +6,10 @@
 #include <string>
 #include <tr1/unordered_set>
 
-#include "evx.hpp"
-#include "buffered_connection.hpp"
+#include "evx/evx.hpp"
+#include "evx/buffered_connection.hpp"
+
+using namespace evx;
 
 class listen_handler
 {

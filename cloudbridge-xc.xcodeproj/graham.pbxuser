@@ -268,13 +268,6 @@
 		modificationTime = 255593647.562788;
 		state = 2;
 	};
-	BF5423110F3BCA5C00B5E5BE /* buffered_connection.hpp */ = {
-		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {870, 3710}}";
-			sepNavSelRange = "{1415, 0}";
-			sepNavVisRange = "{1454, 679}";
-		};
-	};
 	BF5423120F3BCA5C00B5E5BE /* cloudbridge.cpp */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {864, 2352}}";
