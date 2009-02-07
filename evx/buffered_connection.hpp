@@ -7,6 +7,7 @@
 #include <tr1/memory>
 
 #include "buffer.hpp"
+#include "evx.hpp"
 
 namespace evx 
 {
