@@ -1,0 +1,47 @@
+HTTP BRIDGE Method Protocol Extension
+---
+BRIDGE / HTTP/1.x<cr><lf>
+Host: host1.org<cr><lf>
+Host: host2.org<cr><lf>
+Host: hostN.org<cr><lf>
+Host: hostAuthenticated.org <sha1 signature><cr><lf>
+If-<Logical Expression Name>: <arbitrary data><cr><lf>
+<cr><lf>
+...
+(BRIDGE requests have no body and so MUST NOT have any Content-* headers. Content bodies are reserved for a future version. A server
+that does not recognize them should return a 501 error rather than ignore it.)
+
+A BRIDGE request is sent to the server asking the server to give it the next available user-facing request (GET/POST/etc) sent
+to it that matches the parameters in the BRIDGE request. A request matches if it matches ANY of the Host headers passed, prefix matches
+the url component of the BRIDGE request itself, and if it matches all If-* headers passed (see below on If-* headers).
+
+A wildcard host header of * may also be specified, which will accept a request for any host passed by the client. Wilcards will
+only be matched in the absence of a fully matching domain name, and it is recommended that you not mix use of the two.
+
+A server MAY require the hosts to be accompanied by a signature which is calculated by SHA1(host+shared secret) where shared secret is a
+string known by the server. This is to allow for bridging relatively untrusted clients. The client may be given a list of hosts and keys
+they can map to, and they will not be able to use their access to the server to subvert other domains on the same network. 
+
+Logical Expressions
+---
+Each If- header indicates a match parameter for any requests coming in. None have been defined as yet, but when they are they will be
+documented here.
+
+Response
+---
+Generally speaking, either the connection will be routed to an available frontend connection and the response will actually be a fresh
+HTTP request which should be replied to as if it had been part of a listen/accept cycle.
+
+However, some errors may occur and they will be replied to with an error code as if it were a normal HTTP request. To clarify this, the
+response on a successful connection will be something like:
+GET / HTTP/1.1
+
+And on an error will be something like:
+HTTP/1.1 501 Not Implemented
+
+The following error conditions may be returned from a BRIDGE request:
+- 405 Method Not Allowed: The server does not support the BRIDGE request. This would happen if the BRIDGE request were sent to a server
+  that does not actually act as a bridge server.
+- 501 Not Implemented: The server does not support one (or all) of the If- statements given. It may also be given on an incomplete 
+  implementation that does not do prefix matching of the url component.
+- 504 Gateway Timeout: The server was not able to find a match within a reasonable timeout (as configured by the server).
