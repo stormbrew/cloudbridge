@@ -1,5 +1,5 @@
-cloudbridge: cloudbridge.cpp buffered_connection.cpp buffered_connection.hpp buffer.hpp buffer.cpp evx.hpp
-	g++ -I/opt/local/include -L/opt/local/lib -lev -o cloudbridge cloudbridge.cpp buffered_connection.cpp buffer.cpp
+cloudbridge: cloudbridge.cpp evx/buffered_connection.cpp evx/buffered_connection.hpp evx/buffer.hpp evx/buffer.cpp evx/evx.hpp
+	g++ -I/opt/local/include -L/opt/local/lib -lev -o cloudbridge cloudbridge.cpp evx/buffered_connection.cpp evx/buffer.cpp
 
 all:
 	cloudbridge
