@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BF1CDAA40F3D55390020001F /* buffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BF1CDAA30F3D55390020001F /* buffer.cpp */; };
 		BF5423140F3BCA5C00B5E5BE /* buffered_connection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BF5423100F3BCA5C00B5E5BE /* buffered_connection.cpp */; };
 		BF5423150F3BCA5C00B5E5BE /* cloudbridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BF5423120F3BCA5C00B5E5BE /* cloudbridge.cpp */; };
 /* End PBXBuildFile section */
@@ -25,6 +26,7 @@
 
 /* Begin PBXFileReference section */
 		8DD76F6C0486A84900D96B5E /* cloudbridge-xc */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "cloudbridge-xc"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF1CDAA30F3D55390020001F /* buffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = buffer.cpp; sourceTree = "<group>"; };
 		BF54230F0F3BCA5C00B5E5BE /* buffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = buffer.hpp; sourceTree = "<group>"; };
 		BF5423100F3BCA5C00B5E5BE /* buffered_connection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = buffered_connection.cpp; sourceTree = "<group>"; };
 		BF5423110F3BCA5C00B5E5BE /* buffered_connection.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = buffered_connection.hpp; sourceTree = "<group>"; };
@@ -56,6 +58,7 @@
 		08FB7795FE84155DC02AAC07 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				BF1CDAA30F3D55390020001F /* buffer.cpp */,
 				BF54230F0F3BCA5C00B5E5BE /* buffer.hpp */,
 				BF5423100F3BCA5C00B5E5BE /* buffered_connection.cpp */,
 				BF5423110F3BCA5C00B5E5BE /* buffered_connection.hpp */,
@@ -125,6 +128,7 @@
 			files = (
 				BF5423140F3BCA5C00B5E5BE /* buffered_connection.cpp in Sources */,
 				BF5423150F3BCA5C00B5E5BE /* cloudbridge.cpp in Sources */,
+				BF1CDAA40F3D55390020001F /* buffer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

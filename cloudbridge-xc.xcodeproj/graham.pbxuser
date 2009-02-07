@@ -106,11 +106,11 @@
 		delayBeforeContinue = 0;
 		fileReference = BF5423120F3BCA5C00B5E5BE /* cloudbridge.cpp */;
 		functionName = "socket_shutdown(buffered_connection &con)";
-		hitCount = 0;
+		hitCount = 1;
 		ignoreCount = 0;
 		lineNumber = 58;
 		location = "cloudbridge-xc";
-		modificationTime = 255593647.56358;
+		modificationTime = 255593669.52972;
 		state = 1;
 	};
 	BF1CDA9D0F3C0CAA0020001F /* cloudbridge.cpp:70 */ = {
@@ -123,11 +123,11 @@
 		delayBeforeContinue = 0;
 		fileReference = BF5423120F3BCA5C00B5E5BE /* cloudbridge.cpp */;
 		functionName = "socket_close(buffered_connection &con, int err)";
-		hitCount = 0;
+		hitCount = 2;
 		ignoreCount = 0;
 		lineNumber = 70;
 		location = "cloudbridge-xc";
-		modificationTime = 255593647.564009;
+		modificationTime = 255593686.097697;
 		state = 1;
 	};
 	BF2299450F3B93BC00B40845 /* cloudbridge-xc */ = {
@@ -277,9 +277,9 @@
 	};
 	BF5423120F3BCA5C00B5E5BE /* cloudbridge.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {864, 2380}}";
+			sepNavIntBoundsRect = "{{0, 0}, {864, 2352}}";
 			sepNavSelRange = "{4115, 0}";
-			sepNavVisRange = "{3562, 627}";
+			sepNavVisRange = "{1331, 645}";
 		};
 	};
 }
