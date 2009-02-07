@@ -40,6 +40,8 @@ And on an error will be something like:
 HTTP/1.1 501 Not Implemented
 
 The following error conditions may be returned from a BRIDGE request:
+- 401 Unauthorized: The server does not accept one of the host sha1-keys and so will not bridge for the url specified.
+- 404 Not Found: The server will not bridge for the Host or url specified due to configuration.
 - 405 Method Not Allowed: The server does not support the BRIDGE request. This would happen if the BRIDGE request were sent to a server
   that does not actually act as a bridge server.
 - 501 Not Implemented: The server does not support one (or all) of the If- statements given. It may also be given on an incomplete 
