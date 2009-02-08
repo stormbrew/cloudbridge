@@ -186,7 +186,7 @@ connection_pool::find_in(const std::string &host, connection_pool::connection_ho
 		while (con_it != list.end())
 		{
 			connection con = con_it->lock();
-			if (!con || con->closed())
+			if (!con || con->closed() || !con->get_client_handler<connection_finder>())
 			{
 				// remove the dead item from the list and move on.
 				list.erase(con_it);
