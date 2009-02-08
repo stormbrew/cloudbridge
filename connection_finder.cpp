@@ -110,7 +110,8 @@ void connection_finder::data_readable(buffered_connection &con)
 			return error(con, 404, "Not Found", "No Host specified. This server requires a host to be chosen.");
 		
 		connection_pool::connection other_con;
-		if (method == "BRIDGE")
+		bool bridge = method == "BRIDGE";
+		if (bridge)
 		{
 			for (std::list<std::string>::iterator it = hosts.begin(); it != hosts.end(); it++)
 			{
@@ -139,6 +140,10 @@ void connection_finder::data_readable(buffered_connection &con)
 		if (other_con)
 		{
 			std::tr1::shared_ptr<connection_finder> other_finder = other_con->get_client_handler<connection_finder>();
+
+			buffered_connection &bridge_con = bridge? con : *other_con;
+			bridge_con.write("HTTP/1.1 101 Upgrade\r\n"); // taylor http versions to match.
+			bridge_con.write("Upgrade: HTTP/1.1\r\n\r\n");
 
 			morph(con, other_con);
 			other_finder->morph(*other_con, con.shared_from_this());

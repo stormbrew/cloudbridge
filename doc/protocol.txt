@@ -29,17 +29,24 @@ documented here.
 
 Response
 ---
-Generally speaking, either the connection will be routed to an available frontend connection and the response will actually be a fresh
-HTTP request which should be replied to as if it had been part of a listen/accept cycle.
+The immediate response to a BRIDGE request will be either a 101 Upgrade status code or an error code. 101 indicates that the server is willing and able to find a match for this connection and will immediately be supplying a reply. The server may also send one or more 100 Continue codes back before supplying either an error or a 101. The 101 reply will be accompanied by an Upgrade: header with the value HTTP/1.[01]. This is to indicate a resetting of the connection to the reverse.
+
+After a 101 Upgrade status code, the connection will be routed to an available frontend connection and the response will actually be a fresh HTTP request which should be replied to as if it had been part of a listen/accept cycle.
 
 However, some errors may occur and they will be replied to with an error code as if it were a normal HTTP request. To clarify this, the
 response on a successful connection will be something like:
+HTTP/1.1 101 Upgrade
+Upgrade: HTTP/1.1
+
 GET / HTTP/1.1
 
 And on an error will be something like:
 HTTP/1.1 501 Not Implemented
+Content-Length: NN
 
-The following error conditions may be returned from a BRIDGE request:
+Bridge not support If-Cookie-Match.
+
+The following error conditions MAY be returned from a BRIDGE request:
 - 401 Unauthorized: The server does not accept one of the host sha1-keys and so will not bridge for the url specified.
 - 404 Not Found: The server will not bridge for the Host or url specified due to configuration.
 - 405 Method Not Allowed: The server does not support the BRIDGE request. This would happen if the BRIDGE request were sent to a server
