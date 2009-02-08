@@ -13,7 +13,7 @@ require 'cloud_mongrel'
     end
  end
 
- h = Mongrel::HttpServer.new("0.0.0.0", "5432", 950, 0, nil, ["localhost:5432"])
+ h = Mongrel::HttpServer.new("0.0.0.0", "5432")
  h.register("/test", SimpleHandler.new)
  h.register("/files", Mongrel::DirHandler.new("."))
  h.run.join
