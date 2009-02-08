@@ -60,7 +60,6 @@ module CloudMachine
 			name = nil
 			while (@init_data.scan(/(.*?)\r\n/))
 				line = @init_data[1]
-				puts("Line: #{line}")
 				if (line == "")
 					case code.to_i
 					when 100 # 100 Continue, just a ping.
@@ -100,7 +99,7 @@ module CloudMachine
 		end
 
 		def unbind
-			::EventMachine.add_timer(rand(2)) {self.class.connect(@hostname,@port,@key)}
+			::EventMachine.add_timer(rand(2)) {CloudMachine::start_server(@hostname,@port,@hosts,self.class)}
 		end
 	end
 end
