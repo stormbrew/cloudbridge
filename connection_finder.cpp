@@ -88,6 +88,15 @@ bool connection_finder::read_headers(buffered_connection &con)
 	return false;
 }
 
+void connection_finder::parse_hosts()
+{
+	for (header_list::iterator it = headers.begin(); it != headers.end(); it++)
+	{
+		if (it->first == "Host")
+			hosts.push_back(it->second);
+	}
+}
+
 void connection_finder::data_readable(buffered_connection &con)
 {
 	if (mapped)
@@ -95,14 +104,37 @@ void connection_finder::data_readable(buffered_connection &con)
 
 	if (read_headers(con))
 	{
-		bool bridge_request = method == "BRIDGE";
+		parse_hosts();
 		
-		// TODO: this is wrong, it should be using Host headers.
+		if (hosts.size() < 1)
+			return error(con, 404, "Not Found", "No Host specified. This server requires a host to be chosen.");
+		
 		connection_pool::connection other_con;
-		if (bridge_request)
-			other_con = pool->find_client(url);
-		else
-			other_con = pool->find_bridge(url);
+		if (method == "BRIDGE")
+		{
+			for (std::list<std::string>::iterator it = hosts.begin(); it != hosts.end(); it++)
+			{
+				other_con = pool->find_client(*it);
+				if (other_con)
+					break;
+			}
+			
+			if (!other_con)
+			{
+				for (std::list<std::string>::iterator it = hosts.begin(); it != hosts.end(); it++)
+				{
+					pool->register_bridge(*it, con.shared_from_this());
+				}
+			}
+		} else {
+			// client end can only register to one Host.
+			std::string host = hosts.front();
+			
+			other_con = pool->find_bridge(host);
+
+			if (!other_con)
+				pool->register_client(host, con.shared_from_this());
+		}
 			
 		if (other_con)
 		{
@@ -112,12 +144,6 @@ void connection_finder::data_readable(buffered_connection &con)
 			other_finder->morph(*other_con, con.shared_from_this());
 			return;
 		}
-		// only register if we get here.
-		if (bridge_request)
-			pool->register_bridge(url, con.shared_from_this());
-		else
-			pool->register_client(url, con.shared_from_this());
-			
 		mapped = true;
 	}
 }
