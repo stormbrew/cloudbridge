@@ -195,7 +195,10 @@ connection_pool::find_in(const std::string &host, connection_pool::connection_ho
 			}
 		}
 	}
-	return connection();
+	if (host != "*")
+		return find_in("*", map);
+	else
+		return connection();
 }
 
 void
