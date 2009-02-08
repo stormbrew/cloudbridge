@@ -18,9 +18,13 @@ private:
 	bool mapped;
 	
 	std::string method, url;
-	std::list<std::pair<std::string, std::string> > headers;
+	
+	typedef std::list<std::pair<std::string, std::string> > header_list;
+	header_list headers;
+	std::list<std::string> hosts;
 	
 	bool read_headers(evx::buffered_connection &con);
+	void parse_hosts();
 	
 	void morph(evx::buffered_connection &this_con, evx::buffered_connection::ptr other_con);
 	void error(evx::buffered_connection &con, int error_number, const std::string &name, const std::string &text);
