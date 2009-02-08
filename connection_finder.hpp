@@ -62,7 +62,7 @@ public:
 	connection find_client(const std::string &host) { return find_in(host, client_pool); }
 	connection find_bridge(const std::string &host) { return find_in(host, bridge_pool); }
 	
-	void register_client(const std::string &host, connection con) { register_in(host, con, client_pool); }
+	void register_client(const std::string &host, connection con) { register_in(host, con, client_pool); register_in("*", con, client_pool); }
 	void register_bridge(const std::string &host, connection con) { register_in(host, con, bridge_pool); }
 };
 
