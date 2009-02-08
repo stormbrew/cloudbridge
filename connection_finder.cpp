@@ -189,7 +189,8 @@ connection_pool::find_in(const std::string &host, connection_pool::connection_ho
 			if (!con || con->closed())
 			{
 				// remove the dead item from the list and move on.
-				con_it = list.erase(con_it);
+				list.erase(con_it);
+				con_it = list.begin();
 			} else {
 				return con;
 			}
@@ -208,5 +209,5 @@ connection_pool::register_in(const std::string &host, connection_pool::connectio
 	if (host_it == map.end())
 		host_it = map.insert(connection_host_map::value_type(host, connection_list())).first;
 		
-	host_it->second.push_back(con);
+	host_it->second.insert(con);
 }

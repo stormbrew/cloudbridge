@@ -49,7 +49,7 @@ public:
 	
 private:
 	typedef evx::buffered_connection::weak_ptr weak_connection;
-	typedef std::list<weak_connection> connection_list;
+	typedef std::set<weak_connection> connection_list;
 	typedef std::tr1::unordered_map<std::string, connection_list> connection_host_map;
 	
 	connection_host_map client_pool;
