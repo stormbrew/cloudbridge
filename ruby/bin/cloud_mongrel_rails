@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+require 'cloud_mongrel'
+
+# just load the native mongrel version and let it do its thing with our overloaded mongrel class.
+load 'mongrel_rails'
