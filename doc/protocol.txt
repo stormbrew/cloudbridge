@@ -1,6 +1,7 @@
 HTTP BRIDGE Method Protocol Extension
 ---
 BRIDGE / HTTP/1.x<cr><lf>
+Expect: 100-continue<cr><lf>
 Host: host1.org<cr><lf>
 Host: host2.org<cr><lf>
 Host: hostN.org<cr><lf>
@@ -21,6 +22,9 @@ only be matched in the absence of a fully matching domain name, and it is recomm
 A server MAY require the hosts to be accompanied by a signature which is calculated by SHA1(host+shared secret) where shared secret is a
 string known by the server. This is to allow for bridging relatively untrusted clients. The client may be given a list of hosts and keys
 they can map to, and they will not be able to use their access to the server to subvert other domains on the same network. 
+
+The client also MUST pass an Expect: 100-continue header to the server to indicate its willingness to accept 100 status messages while
+pending a match. The bridge server MAY use 100 statuses to ensure that the bridge client has not gone away while waiting to be matched.
 
 Logical Expressions
 ---
