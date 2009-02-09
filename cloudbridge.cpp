@@ -30,6 +30,8 @@ int main()
 	
 	struct ev_loop *loop = ev_default_loop(0);
 	
+	printf("Event Loop initialized: Using backend %d\n", ev_backend(loop));
+	
 	evx_io listen_watcher;
 	evx_init(&listen_watcher, listen_handler(listen_socket));
 	ev_io_set(&listen_watcher, listen_socket, EV_READ);
