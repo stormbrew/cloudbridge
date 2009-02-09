@@ -40,6 +40,11 @@ namespace evx
 		evx_init(&write_watcher, event_handler);
 		ev_io_set(&write_watcher, socket, EV_WRITE);
 		// don't start the write watcher until we have something to write.
+		
+		evx_init(&timer_watcher, event_handler);
+		ev_timer_set(&timer_watcher, 0, 0);
+		
+		client_handler->registered(*this);
 	}
 
 	void buffered_connection::handle_shutdown()
@@ -53,6 +58,7 @@ namespace evx
 			client_handler->socket_close(*this, 0);
 			ev_io_stop(loop, &write_watcher);
 			ev_io_stop(loop, &read_watcher);
+			ev_timer_stop(loop, &timer_watcher);
 			close(socket);
 			socket = -1;
 			closed_connections.push_back(shared_from_this());
@@ -82,6 +88,7 @@ namespace evx
 			client_handler->socket_close(*this, err);
 			ev_io_stop(loop, &write_watcher);
 			ev_io_stop(loop, &read_watcher);
+			ev_timer_stop(loop, &timer_watcher);
 			close(socket);
 			socket = -1;
 			closed_connections.push_back(shared_from_this());
@@ -139,6 +146,13 @@ namespace evx
 				ev_io_stop(loop, &write_watcher);
 			}
 		}
+		if (revents & EV_TIMEOUT)
+		{
+			// prematurely assume we want the timer to go again. The handler can change its mind about that
+			// if it wants to.
+			ev_timer_again(loop, &timer_watcher);
+			client_handler->timeout(*this);
+		}
 	}
 
 	buffered_connection::~buffered_connection()
@@ -146,6 +160,7 @@ namespace evx
 		// close the connection outright
 		evx_clean(&read_watcher);
 		evx_clean(&write_watcher);
+		evx_clean(&timer_watcher);
 	}
 
 	void buffered_connection::shutdown()
@@ -158,6 +173,8 @@ namespace evx
 	void buffered_connection::set_client_handler(client_handler_ptr handler)
 	{
 		client_handler = handler;
+		ev_timer_stop(loop, &timer_watcher); // let the new handler decide what it wants to do with the timer.
+		client_handler->registered(*this);
 		if (read_begin() != read_end())
 		{
 			client_handler->data_readable(*this);
@@ -173,5 +190,25 @@ namespace evx
 			return delim + linedelim.length();
 		}
 		return it;
+	}
+	
+	void buffered_connection::set_timeout(double seconds)
+	{printf("Setting timeout to %f", seconds);
+		if (ev_is_active(&timer_watcher))
+		{
+			ev_timer_set(&timer_watcher, seconds, seconds);
+			ev_timer_start(loop, &timer_watcher);
+		} else {
+			timer_watcher.repeat = seconds;
+			reset_timeout();
+		}
+	}
+	void buffered_connection::stop_timeout()
+	{
+		ev_timer_stop(loop, &timer_watcher);
+	}
+	void buffered_connection::reset_timeout()
+	{
+		ev_timer_again(loop, &timer_watcher);
 	}
 }

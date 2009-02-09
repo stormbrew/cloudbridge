@@ -15,7 +15,12 @@ class connection_finder : public evx::buffered_handler_base
 {
 private:
 	std::tr1::shared_ptr<connection_pool> pool;
-	bool mapped;
+	
+	enum {
+		type_unknown,
+		type_bridge,
+		type_client,
+	} connection_type;
 	
 	std::string method, url;
 	
@@ -26,14 +31,18 @@ private:
 	bool read_headers(evx::buffered_connection &con);
 	void parse_hosts();
 	
+	void set_timeout_by_type(evx::buffered_connection &con);
+	
 	void morph(evx::buffered_connection &this_con, evx::buffered_connection::ptr other_con);
 	void error(evx::buffered_connection &con, int error_number, const std::string &name, const std::string &text);
 
 public:	
 	connection_finder(std::tr1::shared_ptr<connection_pool> c_pool)
-	 : pool(c_pool), mapped(false)
+	 : pool(c_pool), connection_type(type_unknown)
 	{}
 	
+	void registered(evx::buffered_connection &con);
+	void timeout(evx::buffered_connection &con);
 	void data_readable(evx::buffered_connection &con);
 	void socket_shutdown(evx::buffered_connection &con);
 	void socket_close(evx::buffered_connection &con, int err);
