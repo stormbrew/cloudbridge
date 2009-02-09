@@ -35,14 +35,17 @@ class CloudServer
 		socket.write("\r\n")
 		code = nil
 		name = nil
+		headers = []
 		while (line = socket.gets())
 			line = line.strip
 			if (line == "")
 				case code.to_i
 				when 100 # 100 Continue, just a ping. Ignore.
 					code = name = nil
+					headers = []
 					next
 				when 101 # 101 Upgrade, successfuly got a connection.
+					socket.write("HTTP/1.1 100 Continue\r\n\r\n") # let the server know we're still here.
 					return socket
 				when 504 # 504 Gateway Timeout, just retry.
 					socket.close()
@@ -52,13 +55,19 @@ class CloudServer
 				end
 			end
 			
-			if (!code && !name)
+			if (!code && !name) # This is the initial response line
 				if (match = line.match(%r{^HTTP/1\.[01] ([0-9]{3,3}) (.*)$}))
 					code = match[1]
 					name = match[2]
 					next
 				else
 					raise "Parse error in BRIDGE request reply."
+				end
+			else
+				if (match = line.match(%r{^(.+?):\s+(.+)$}))
+					headers.push({match[1] => match[2]})
+				else
+					raise "Parse error in BRIDGE request reply's headers."
 				end
 			end
 		end
