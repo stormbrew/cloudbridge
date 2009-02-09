@@ -154,13 +154,13 @@ void connection_finder::data_readable(buffered_connection &con)
 }
 void connection_finder::socket_shutdown(buffered_connection &con)
 {
-	puts("Got remote shutdown.");
 	// shut down right back.
 	con.shutdown();
 }
 void connection_finder::socket_close(buffered_connection &con, int err)
 {
-	printf("Socket closed, errno: 0x%x\n", err);
+	if (err)
+		printf("Waiting socket closed due to error, errno: 0x%x\n", err);
 }
 
 void connection_finder::error(evx::buffered_connection &con, int error_number, const std::string &name, const std::string &text)
