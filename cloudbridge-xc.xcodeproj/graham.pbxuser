@@ -11,9 +11,10 @@
 			BF2299E20F3BA89300B40845 /* cloudbridge.cpp:54 */,
 			BF2299F80F3BAB0E00B40845 /* buffered_connection.hpp:178 */,
 			BF2299FF0F3BAB4400B40845 /* buffered_connection.hpp:95 */,
-			BF1CDA8B0F3C0B690020001F /* cloudbridge.cpp:150 */,
-			BF1CDA9B0F3C0CA80020001F /* cloudbridge.cpp:58 */,
-			BF1CDA9D0F3C0CAA0020001F /* cloudbridge.cpp:70 */,
+			BF1CDA8B0F3C0B690020001F /* cloudbridge.cpp:40 */,
+			BF1CDA9B0F3C0CA80020001F /* cloudbridge.cpp:40 */,
+			BF1CDA9D0F3C0CAA0020001F /* cloudbridge.cpp:40 */,
+			BF1CDAC60F3F557C0020001F /* cloudbridge.cpp:20 */,
 		);
 		codeSenseManager = BF2299490F3B93CB00B40845 /* Code sense */;
 		executables = (
@@ -49,7 +50,7 @@
 				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
 				PBXFileTableDataSourceColumnWidthsKey = (
 					20,
-					341,
+					450,
 					20,
 					48,
 					43,
@@ -66,8 +67,14 @@
 					PBXFileDataSource_Target_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 255580668;
-			PBXWorkspaceStateSaveDate = 255580668;
+			PBXPerProjectTemplateStateSaveDate = 255808844;
+			PBXWorkspaceStateSaveDate = 255808844;
+		};
+		perUserProjectItems = {
+			BF1CDAC90F3F55930020001F /* PBXTextBookmark */ = BF1CDAC90F3F55930020001F /* PBXTextBookmark */;
+			BF1CDACA0F3F55930020001F /* PBXTextBookmark */ = BF1CDACA0F3F55930020001F /* PBXTextBookmark */;
+			BF1CDACB0F3F55930020001F /* PBXTextBookmark */ = BF1CDACB0F3F55930020001F /* PBXTextBookmark */;
+			BF1CDACC0F3F55930020001F /* PBXTextBookmark */ = BF1CDACC0F3F55930020001F /* PBXTextBookmark */;
 		};
 		sourceControlManager = BF2299480F3B93CB00B40845 /* Source Control */;
 		userBuildSettings = {
@@ -79,7 +86,65 @@
 			BF2299450F3B93BC00B40845 /* cloudbridge-xc */,
 		);
 	};
-	BF1CDA8B0F3C0B690020001F /* cloudbridge.cpp:150 */ = {
+	BF1CDA8B0F3C0B690020001F /* cloudbridge.cpp:40 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = BF5423120F3BCA5C00B5E5BE /* cloudbridge.cpp */;
+		functionName = "main()";
+		hitCount = 0;
+		ignoreCount = 0;
+		lineNumber = 40;
+		location = "cloudbridge-xc";
+		modificationTime = 255808898.893179;
+		state = 1;
+	};
+	BF1CDA9B0F3C0CA80020001F /* cloudbridge.cpp:40 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = BF5423120F3BCA5C00B5E5BE /* cloudbridge.cpp */;
+		functionName = "socket_shutdown(buffered_connection &con)";
+		hitCount = 0;
+		ignoreCount = 0;
+		lineNumber = 40;
+		location = "cloudbridge-xc";
+		modificationTime = 255808898.893204;
+		state = 1;
+	};
+	BF1CDA9D0F3C0CAA0020001F /* cloudbridge.cpp:40 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = BF5423120F3BCA5C00B5E5BE /* cloudbridge.cpp */;
+		functionName = "socket_close(buffered_connection &con, int err)";
+		hitCount = 0;
+		ignoreCount = 0;
+		lineNumber = 40;
+		location = "cloudbridge-xc";
+		modificationTime = 255808898.893221;
+		state = 1;
+	};
+	BF1CDAAC0F3D67D50020001F /* chat_handler.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {628, 602}}";
+			sepNavSelRange = "{49, 0}";
+			sepNavVisRange = "{671, 483}";
+		};
+	};
+	BF1CDAC60F3F557C0020001F /* cloudbridge.cpp:20 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -91,44 +156,50 @@
 		functionName = "main()";
 		hitCount = 1;
 		ignoreCount = 0;
-		lineNumber = 150;
+		lineNumber = 20;
 		location = "cloudbridge-xc";
-		modificationTime = 255593648.886968;
+		modificationTime = 255808900.221512;
 		state = 1;
 	};
-	BF1CDA9B0F3C0CA80020001F /* cloudbridge.cpp:58 */ = {
-		isa = PBXFileBreakpoint;
-		actions = (
-		);
-		breakpointStyle = 0;
-		continueAfterActions = 0;
-		countType = 0;
-		delayBeforeContinue = 0;
-		fileReference = BF5423120F3BCA5C00B5E5BE /* cloudbridge.cpp */;
-		functionName = "socket_shutdown(buffered_connection &con)";
-		hitCount = 1;
-		ignoreCount = 0;
-		lineNumber = 58;
-		location = "cloudbridge-xc";
-		modificationTime = 255593669.52972;
-		state = 1;
+	BF1CDAC90F3F55930020001F /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = BF1CDAAC0F3D67D50020001F /* chat_handler.cpp */;
+		name = "chat_handler.cpp: 3";
+		rLen = 0;
+		rLoc = 49;
+		rType = 0;
+		vrLen = 483;
+		vrLoc = 671;
 	};
-	BF1CDA9D0F3C0CAA0020001F /* cloudbridge.cpp:70 */ = {
-		isa = PBXFileBreakpoint;
-		actions = (
-		);
-		breakpointStyle = 0;
-		continueAfterActions = 0;
-		countType = 0;
-		delayBeforeContinue = 0;
-		fileReference = BF5423120F3BCA5C00B5E5BE /* cloudbridge.cpp */;
-		functionName = "socket_close(buffered_connection &con, int err)";
-		hitCount = 2;
-		ignoreCount = 0;
-		lineNumber = 70;
-		location = "cloudbridge-xc";
-		modificationTime = 255593686.097697;
-		state = 1;
+	BF1CDACA0F3F55930020001F /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = BF5423120F3BCA5C00B5E5BE /* cloudbridge.cpp */;
+		name = "cloudbridge.cpp: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 338;
+		vrLoc = 0;
+	};
+	BF1CDACB0F3F55930020001F /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = BF1CDAAC0F3D67D50020001F /* chat_handler.cpp */;
+		name = "chat_handler.cpp: 3";
+		rLen = 0;
+		rLoc = 49;
+		rType = 0;
+		vrLen = 483;
+		vrLoc = 671;
+	};
+	BF1CDACC0F3F55930020001F /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = BF5423120F3BCA5C00B5E5BE /* cloudbridge.cpp */;
+		name = "cloudbridge.cpp: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 517;
+		vrLoc = 327;
 	};
 	BF2299450F3B93BC00B40845 /* cloudbridge-xc */ = {
 		isa = PBXExecutable;
@@ -231,7 +302,7 @@
 		ignoreCount = 0;
 		lineNumber = 54;
 		location = "cloudbridge-xc";
-		modificationTime = 255593647.561956;
+		modificationTime = 255808898.893142;
 		state = 2;
 	};
 	BF2299F80F3BAB0E00B40845 /* buffered_connection.hpp:178 */ = {
@@ -248,7 +319,7 @@
 		ignoreCount = 0;
 		lineNumber = 178;
 		location = "cloudbridge-xc";
-		modificationTime = 255593647.562441;
+		modificationTime = 255808898.89316;
 		state = 2;
 	};
 	BF2299FF0F3BAB4400B40845 /* buffered_connection.hpp:95 */ = {
@@ -265,14 +336,14 @@
 		ignoreCount = 0;
 		lineNumber = 95;
 		location = "cloudbridge-xc";
-		modificationTime = 255593647.562788;
+		modificationTime = 255808898.89317;
 		state = 2;
 	};
 	BF5423120F3BCA5C00B5E5BE /* cloudbridge.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {864, 2352}}";
-			sepNavSelRange = "{4115, 0}";
-			sepNavVisRange = "{1331, 645}";
+			sepNavIntBoundsRect = "{{0, 0}, {628, 546}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{327, 517}";
 		};
 	};
 }
