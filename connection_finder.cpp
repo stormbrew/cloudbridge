@@ -97,10 +97,50 @@ void connection_finder::parse_hosts()
 	}
 }
 
+void connection_finder::set_timeout_by_type(evx::buffered_connection &con)
+{
+	switch (connection_type)
+	{
+	case type_unknown:
+		con.set_timeout(5); // should know what type of request this is within 0.5 seconds.
+		break;
+	case type_bridge:
+		con.set_timeout(1); // ping the backend once a second.
+		break;
+	case type_client:
+		con.set_timeout(60); // give us a minute to find a backend (this is fairly long)
+		break;
+	}
+}
+
+void connection_finder::registered(evx::buffered_connection &con)
+{
+	set_timeout_by_type(con);
+}
+void connection_finder::timeout(evx::buffered_connection &con)
+{
+	switch (connection_type)
+	{
+	case type_unknown:
+		error(con, 504, "Gateway Timeout", "Did not receive data in time.");
+		con.shutdown(); // connection has been waiting in indeterminate state and is now dead.
+		break;
+	case type_bridge:
+		con.write("HTTP/1.1 100 Continue\r\n\r\n"); // ping the other end and let the connection die if it doesn't make it.
+		break;
+	case type_client:
+		error(con, 504, "Gateway Timeout", "Could not match to a backend server in time.");
+		con.shutdown(); // backend matching timed out, so give up on it.
+		break;
+	}
+}
+
 void connection_finder::data_readable(buffered_connection &con)
 {
-	if (mapped)
+	if (connection_type != type_unknown)
 		return; // ignore input, let the chat handler pick it up later.
+		
+	con.reset_timeout();
 
 	if (read_headers(con))
 	{
@@ -149,7 +189,8 @@ void connection_finder::data_readable(buffered_connection &con)
 			other_finder->morph(*other_con, con.shared_from_this());
 			return;
 		}
-		mapped = true;
+		connection_type = bridge? type_bridge : type_client;
+		set_timeout_by_type(con);
 	}
 }
 void connection_finder::socket_shutdown(buffered_connection &con)

@@ -16,7 +16,9 @@ namespace evx
 	class buffered_handler_base
 	{
 	public:
+		virtual void registered(buffered_connection &con) = 0;
 		virtual void data_readable(buffered_connection &con) = 0;
+		virtual void timeout(buffered_connection &con) = 0;
 		virtual void socket_shutdown(buffered_connection &con) = 0;
 		virtual void socket_close(buffered_connection &con, int err) = 0;
 	};
@@ -55,7 +57,8 @@ namespace evx
 			 : owner(c_owner)
 			{}
 		
-			void operator()(struct ev_loop *loop, evx_io *watcher, int revents)
+			template <typename tEvType>
+			void operator()(struct ev_loop *loop, tEvType *watcher, int revents)
 			{
 				owner.handle(revents);
 			}
@@ -64,6 +67,7 @@ namespace evx
 	
 		evx_io read_watcher;
 		evx_io write_watcher;
+		evx_timer timer_watcher;
 		handler event_handler;
 
 	protected:
@@ -90,6 +94,21 @@ namespace evx
 
 		void shutdown();
 	
+		// changes the handler for this connection. If there is data to be read on the
+		// read buffer, it then notifies the handler of that fact.
+		void set_client_handler(client_handler_ptr handler);
+	
+		template <typename tClientHandler>
+		std::tr1::shared_ptr<tClientHandler> get_client_handler()
+		{
+			return std::tr1::dynamic_pointer_cast<tClientHandler>(client_handler);
+		}
+		
+		// register a timeout after which the handler will be called.
+		void set_timeout(double seconds);
+		void reset_timeout(); // starts counting down the timeout again.
+		void stop_timeout(); // stops counting the timeout. Use set_timeout or reset_timeout to start it again.
+
 		typedef buffer::iterator iterator;
 		iterator read_begin()
 		{
@@ -102,16 +121,6 @@ namespace evx
 		iterator set_read_begin(iterator new_begin)
 		{
 			return read_buffer.set_read_begin(new_begin);
-		}
-	
-		// changes the handler for this connection. If there is data to be read on the
-		// read buffer, it then notifies the handler of that fact.
-		void set_client_handler(client_handler_ptr handler);
-	
-		template <typename tClientHandler>
-		std::tr1::shared_ptr<tClientHandler> get_client_handler()
-		{
-			return std::tr1::dynamic_pointer_cast<tClientHandler>(client_handler);
 		}
 	
 		// attempts to read a single line from the buffer starting at it and returns an iterator

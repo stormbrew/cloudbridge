@@ -2,8 +2,14 @@
 
 using namespace evx;
 
+void chat_handler::registered(evx::buffered_connection &con)
+{}
+void chat_handler::timeout(evx::buffered_connection &con)
+{}
+
 void chat_handler::data_readable(buffered_connection &con)
 {
+	// TODO: Implement ignoring of initial 100 Continue header.
 	buffered_connection::ptr other_ptr = other.lock();
 
 	if (!other_ptr || other_ptr->closed())

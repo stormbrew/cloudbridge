@@ -13,6 +13,8 @@ public:
 	 : other(c_other)
 	{}
 	
+	void registered(evx::buffered_connection &con);
+	void timeout(evx::buffered_connection &con);
 	void data_readable(evx::buffered_connection &con);
 	void socket_shutdown(evx::buffered_connection &con);
 	void socket_close(evx::buffered_connection &con, int err);
