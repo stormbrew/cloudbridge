@@ -60,7 +60,7 @@ The following error conditions MAY be returned from a BRIDGE request:
 - 504 Gateway Timeout: The server was not able to find a match within a reasonable timeout (as configured by the server).
 
 Once the BRIDGE request has been replied to, the roles of client and server are immediately reversed. Once a 101 Upgrade request 
-is received by the bridge client, it SHOULD immediately send a 100 Continue message to the cloudbridge server in order to indicate
+is received by the bridge client, it MUST immediately send a 100 Continue message to the cloudbridge server in order to indicate
 its readiness to handle the incoming request. A cloudbridge server MAY time out a connection on a very short fuse without this 100
 status in order to retry with a different, more available, backend. Cloudbridge servers MUST NOT pass on an initial 100 Continue
 header to the frontend server, as it is not generally a well formed reply to the request given by the originating client (without an
