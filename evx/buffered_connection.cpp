@@ -193,15 +193,9 @@ namespace evx
 	}
 	
 	void buffered_connection::set_timeout(double seconds)
-	{printf("Setting timeout to %f", seconds);
-		if (ev_is_active(&timer_watcher))
-		{
-			ev_timer_set(&timer_watcher, seconds, seconds);
-			ev_timer_start(loop, &timer_watcher);
-		} else {
-			timer_watcher.repeat = seconds;
-			reset_timeout();
-		}
+	{
+		timer_watcher.repeat = seconds;
+		reset_timeout();
 	}
 	void buffered_connection::stop_timeout()
 	{

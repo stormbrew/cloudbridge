@@ -105,7 +105,7 @@ void connection_finder::set_timeout_by_type(evx::buffered_connection &con)
 		con.set_timeout(5); // should know what type of request this is within 0.5 seconds.
 		break;
 	case type_bridge:
-		con.set_timeout(1); // ping the backend once a second.
+		con.set_timeout(15); // ping the backend once every 15 seconds.
 		break;
 	case type_client:
 		con.set_timeout(60); // give us a minute to find a backend (this is fairly long)
