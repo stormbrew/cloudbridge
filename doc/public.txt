@@ -4,6 +4,8 @@ Have a copy of cloudbridge running on a public port, a wildcard subdomain mappin
 get a key for your app.
 
 This requires the following things to be finished implementing in cloudbridge:
+- command line args
+- proper timeouts
 - Accepting keys for hosts
 - Memory leaks and random disconnections generally cleaned up (but both of those probably acceptable for desired SLA)
 - Website on which you can register for a key
