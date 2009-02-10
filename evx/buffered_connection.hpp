@@ -75,8 +75,6 @@ namespace evx
 	
 		void handle_shutdown();
 	
-		void error_close(int err);
-	
 		void handle(int revents);
 	
 	public:
@@ -92,6 +90,7 @@ namespace evx
 			return socket == -1;
 		}
 
+		void error_close(int err);
 		void shutdown();
 	
 		// changes the handler for this connection. If there is data to be read on the

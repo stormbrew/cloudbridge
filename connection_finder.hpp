@@ -6,6 +6,12 @@
 
 #include "evx/buffered_connection.hpp"
 
+enum connection_type_t {
+	type_unknown,
+	type_bridge,
+	type_client,
+};
+
 class connection_pool;
 
 // this class is a state machine class that matches itself to another connection_finder class
@@ -16,11 +22,7 @@ class connection_finder : public evx::buffered_handler_base
 private:
 	std::tr1::shared_ptr<connection_pool> pool;
 	
-	enum {
-		type_unknown,
-		type_bridge,
-		type_client,
-	} connection_type;
+	connection_type_t connection_type;
 	
 	std::string method, url;
 	
@@ -33,13 +35,20 @@ private:
 	
 	void set_timeout_by_type(evx::buffered_connection &con);
 	
-	void morph(evx::buffered_connection &this_con, evx::buffered_connection::ptr other_con);
+	void register_connection(evx::buffered_connection &this_con);
+	void unregister_connection(evx::buffered_connection &this_con);
+	
 	void error(evx::buffered_connection &con, int error_number, const std::string &name, const std::string &text);
 
 public:	
 	connection_finder(std::tr1::shared_ptr<connection_pool> c_pool)
 	 : pool(c_pool), connection_type(type_unknown)
 	{}
+	
+	// public because on failure, a backend connection will have to manipulate the
+	// frontend connection depending on whether the backend is really available or not.
+	void find_connection(evx::buffered_connection &con);
+	void morph(evx::buffered_connection &this_con, evx::buffered_connection::ptr other_con);
 	
 	void registered(evx::buffered_connection &con);
 	void timeout(evx::buffered_connection &con);
@@ -66,12 +75,15 @@ private:
 	
 	connection find_in(const std::string &host, connection_host_map &map);
 	void register_in(const std::string &host, connection con, connection_host_map &map);
+	void unregister_in(const std::string &host, connection con, connection_host_map &map);
 	
 public:
 	connection find_client(const std::string &host) { return find_in(host, client_pool); }
 	connection find_bridge(const std::string &host) { return find_in(host, bridge_pool); }
 	
-	void register_client(const std::string &host, connection con) { register_in(host, con, client_pool); register_in("*", con, client_pool); }
+	void unregister_client(const std::string &host, connection con) { unregister_in(host, con, client_pool); }
+	void register_client(const std::string &host, connection con) { register_in(host, con, client_pool); }
+	void unregister_bridge(const std::string &host, connection con) { unregister_in(host, con, bridge_pool); }
 	void register_bridge(const std::string &host, connection con) { register_in(host, con, bridge_pool); }
 };
 

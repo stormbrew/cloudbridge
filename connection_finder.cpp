@@ -5,9 +5,30 @@
 
 using namespace evx;
 
+void connection_finder::register_connection(buffered_connection &con)
+{
+	for (std::list<std::string>::iterator it = hosts.begin(); it != hosts.end(); it++)
+	{
+		if (connection_type == type_bridge)
+			pool->register_bridge(*it, con.shared_from_this());
+		else if (connection_type == type_client)
+			pool->register_client(*it, con.shared_from_this());
+	}
+}
+void connection_finder::unregister_connection(buffered_connection &con)
+{
+	for (std::list<std::string>::iterator it = hosts.begin(); it != hosts.end(); it++)
+	{
+		if (connection_type == type_bridge)
+			pool->unregister_bridge(*it, con.shared_from_this());
+		else if (connection_type == type_client)
+			pool->unregister_client(*it, con.shared_from_this());
+	}
+}
+
 void connection_finder::morph(buffered_connection &this_con, buffered_connection::ptr other_con)
 {
-	buffered_connection::client_handler_ptr new_handler(new chat_handler(other_con));
+	buffered_connection::client_handler_ptr new_handler(new chat_handler(other_con, connection_type));
 	this_con.set_client_handler(new_handler);
 }
 
@@ -149,57 +170,72 @@ void connection_finder::data_readable(buffered_connection &con)
 		if (hosts.size() < 1)
 			return error(con, 404, "Not Found", "No Host specified. This server requires a host to be chosen.");
 		
-		connection_pool::connection other_con;
-		bool bridge = method == "BRIDGE";
-		if (bridge)
-		{
-			for (std::list<std::string>::iterator it = hosts.begin(); it != hosts.end(); it++)
-			{
-				other_con = pool->find_client(*it);
-				if (other_con)
-					break;
-			}
-			
-			if (!other_con)
-			{
-				for (std::list<std::string>::iterator it = hosts.begin(); it != hosts.end(); it++)
-				{
-					pool->register_bridge(*it, con.shared_from_this());
-				}
-			}
-		} else {
-			// client end can only register to one Host.
-			std::string host = hosts.front();
-			
-			other_con = pool->find_bridge(host);
-
-			if (!other_con)
-				pool->register_client(host, con.shared_from_this());
-		}
-			
-		if (other_con)
-		{
-			std::tr1::shared_ptr<connection_finder> other_finder = other_con->get_client_handler<connection_finder>();
-
-			buffered_connection &bridge_con = bridge? con : *other_con;
-			bridge_con.write("HTTP/1.1 101 Upgrade\r\n"); // taylor http versions to match.
-			bridge_con.write("Upgrade: HTTP/1.1\r\n\r\n");
-
-			morph(con, other_con);
-			other_finder->morph(*other_con, con.shared_from_this());
-			return;
-		}
-		connection_type = bridge? type_bridge : type_client;
+		connection_type = method == "BRIDGE"? type_bridge : type_client;
+		
 		set_timeout_by_type(con);
+		
+		find_connection(con);
 	}
 }
+
+void connection_finder::find_connection(buffered_connection &con)
+{
+	connection_pool::connection other_con;
+	if (connection_type == type_bridge)
+	{
+		for (std::list<std::string>::iterator it = hosts.begin(); it != hosts.end(); it++)
+		{
+			other_con = pool->find_client(*it);
+			if (other_con)
+				break;
+		}
+	} else {
+		// client end can only register to one Host (and wildcard). To prevent future zaniness, we
+		// make sure that's all that's in the hosts list.
+		hosts.erase(++hosts.begin(), hosts.end());
+		hosts.push_back("*");
+		
+		for (std::list<std::string>::iterator it = hosts.begin(); it != hosts.end(); it++)
+		{
+			other_con = pool->find_bridge(*it);
+			if (other_con)
+				break;
+		}
+	}
+		
+	if (other_con)
+	{
+		std::tr1::shared_ptr<connection_finder> other_finder = other_con->get_client_handler<connection_finder>();
+
+		buffered_connection &bridge_con = connection_type == type_bridge? con : *other_con;
+		bridge_con.write("HTTP/1.1 101 Upgrade\r\n"); // taylor http versions to match.
+		bridge_con.write("Upgrade: HTTP/1.1\r\n\r\n");
+		
+		unregister_connection(con);
+		other_finder->unregister_connection(*other_con);
+
+		// morph the backend. The frontend will be morphed by the backend connection
+		// when the backend has proven itself able to take a connection (otherwise, the
+		// frontend connection is left pristine so it can be taken over by another more
+		// successful backend connection)
+		if (connection_type == type_bridge)
+			morph(con, other_con);
+		else
+			other_finder->morph(*other_con, con.shared_from_this());
+	} else {
+		register_connection(con);
+	}
+}
+
 void connection_finder::socket_shutdown(buffered_connection &con)
 {
+	unregister_connection(con);
 	// shut down right back.
 	con.shutdown();
 }
 void connection_finder::socket_close(buffered_connection &con, int err)
 {
+	unregister_connection(con);
 	if (err)
 		printf("Waiting socket closed due to error, errno: 0x%x\n", err);
 }
@@ -232,6 +268,7 @@ connection_pool::find_in(const std::string &host, connection_pool::connection_ho
 				// remove the dead item from the list and move on.
 				list.erase(con_it);
 				con_it = list.begin();
+				printf("Warning: Reaped a dead reference to a connection in the list for %s. Could be lingering disconnected, or could have been improperly removed.\n", host.c_str());
 			} else {
 				return con;
 			}
@@ -251,4 +288,11 @@ connection_pool::register_in(const std::string &host, connection_pool::connectio
 		host_it = map.insert(connection_host_map::value_type(host, connection_list())).first;
 		
 	host_it->second.insert(con);
+}
+void
+connection_pool::unregister_in(const std::string &host, connection_pool::connection con, connection_pool::connection_host_map &map)
+{
+	connection_host_map::iterator host_it = map.find(host);
+	if (host_it != map.end())
+		host_it->second.erase(con);
 }
