@@ -12,6 +12,7 @@
 		BF1CDAB20F3D67D50020001F /* chat_handler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BF1CDAAC0F3D67D50020001F /* chat_handler.cpp */; };
 		BF1CDAB30F3D67D50020001F /* connection_finder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BF1CDAAE0F3D67D50020001F /* connection_finder.cpp */; };
 		BF1CDAB40F3D67D50020001F /* listen_handler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BF1CDAB00F3D67D50020001F /* listen_handler.cpp */; };
+		BF1CDB160F428F4B0020001F /* util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BF1CDB140F428F4B0020001F /* util.cpp */; };
 		BF5423150F3BCA5C00B5E5BE /* cloudbridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BF5423120F3BCA5C00B5E5BE /* cloudbridge.cpp */; };
 /* End PBXBuildFile section */
 
@@ -40,6 +41,8 @@
 		BF1CDAAF0F3D67D50020001F /* connection_finder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = connection_finder.hpp; sourceTree = "<group>"; };
 		BF1CDAB00F3D67D50020001F /* listen_handler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = listen_handler.cpp; sourceTree = "<group>"; };
 		BF1CDAB10F3D67D50020001F /* listen_handler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = listen_handler.hpp; sourceTree = "<group>"; };
+		BF1CDB140F428F4B0020001F /* util.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = util.cpp; sourceTree = "<group>"; };
+		BF1CDB150F428F4B0020001F /* util.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = util.hpp; sourceTree = "<group>"; };
 		BF5423120F3BCA5C00B5E5BE /* cloudbridge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cloudbridge.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -67,6 +70,8 @@
 		08FB7795FE84155DC02AAC07 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				BF1CDB140F428F4B0020001F /* util.cpp */,
+				BF1CDB150F428F4B0020001F /* util.hpp */,
 				BF1CDAAC0F3D67D50020001F /* chat_handler.cpp */,
 				BF1CDAAD0F3D67D50020001F /* chat_handler.hpp */,
 				BF1CDAAE0F3D67D50020001F /* connection_finder.cpp */,
@@ -147,6 +152,7 @@
 				BF1CDAB20F3D67D50020001F /* chat_handler.cpp in Sources */,
 				BF1CDAB30F3D67D50020001F /* connection_finder.cpp in Sources */,
 				BF1CDAB40F3D67D50020001F /* listen_handler.cpp in Sources */,
+				BF1CDB160F428F4B0020001F /* util.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -193,7 +199,10 @@
 				HEADER_SEARCH_PATHS = /opt/local/include;
 				LIBRARY_SEARCH_PATHS = /opt/local/lib;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = "-lev";
+				OTHER_LDFLAGS = (
+					"-ltomcrypt",
+					"-lev",
+				);
 				PREBINDING = NO;
 				SDKROOT = macosx10.5;
 			};

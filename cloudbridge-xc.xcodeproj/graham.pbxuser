@@ -87,6 +87,8 @@
 			BF1CDB090F4175EC0020001F /* PBXTextBookmark */ = BF1CDB090F4175EC0020001F /* PBXTextBookmark */;
 			BF1CDB0B0F4176010020001F /* PBXTextBookmark */ = BF1CDB0B0F4176010020001F /* PBXTextBookmark */;
 			BF1CDB0F0F41766E0020001F /* PBXTextBookmark */ = BF1CDB0F0F41766E0020001F /* PBXTextBookmark */;
+			BF1CDB130F428F120020001F /* PBXTextBookmark */ = BF1CDB130F428F120020001F /* PBXTextBookmark */;
+			BF1CDB1D0F42991D0020001F /* PBXTextBookmark */ = BF1CDB1D0F42991D0020001F /* PBXTextBookmark */;
 		};
 		sourceControlManager = BF2299480F3B93CB00B40845 /* Source Control */;
 		userBuildSettings = {
@@ -100,15 +102,15 @@
 	};
 	BF1CDAAC0F3D67D50020001F /* chat_handler.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {986, 1190}}";
-			sepNavSelRange = "{3001, 0}";
-			sepNavVisRange = "{1274, 929}";
+			sepNavIntBoundsRect = "{{0, 0}, {986, 1288}}";
+			sepNavSelRange = "{2336, 0}";
+			sepNavVisRange = "{1933, 584}";
 		};
 	};
 	BF1CDAAE0F3D67D50020001F /* connection_finder.cpp */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {806, 4270}}";
-			sepNavSelRange = "{8929, 0}";
+			sepNavSelRange = "{5525, 0}";
 			sepNavVisRange = "{5290, 1025}";
 		};
 	};
@@ -283,11 +285,11 @@
 		delayBeforeContinue = 0;
 		fileReference = BF1CDAAC0F3D67D50020001F /* chat_handler.cpp */;
 		functionName = "chat_handler::data_readable(buffered_connection &con)";
-		hitCount = 0;
+		hitCount = 1;
 		ignoreCount = 0;
 		lineNumber = 51;
 		location = "cloudbridge-xc";
-		modificationTime = 255948392.856918;
+		modificationTime = 255948399.978342;
 		state = 1;
 	};
 	BF1CDB090F4175EC0020001F /* PBXTextBookmark */ = {
@@ -320,6 +322,26 @@
 		vrLen = 1025;
 		vrLoc = 5290;
 	};
+	BF1CDB130F428F120020001F /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = BF1CDAAE0F3D67D50020001F /* connection_finder.cpp */;
+		name = "connection_finder.cpp: 299";
+		rLen = 0;
+		rLoc = 8929;
+		rType = 0;
+		vrLen = 1026;
+		vrLoc = 5290;
+	};
+	BF1CDB1D0F42991D0020001F /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = BF1CDAAE0F3D67D50020001F /* connection_finder.cpp */;
+		name = "connection_finder.cpp: 193";
+		rLen = 0;
+		rLoc = 5525;
+		rType = 0;
+		vrLen = 1025;
+		vrLoc = 5290;
+	};
 	BF2299450F3B93BC00B40845 /* cloudbridge-xc */ = {
 		isa = PBXExecutable;
 		activeArgIndices = (
@@ -327,7 +349,7 @@
 		argumentStrings = (
 		);
 		autoAttachOnCrash = 1;
-		breakpointsEnabled = 1;
+		breakpointsEnabled = 0;
 		configStateDict = {
 		};
 		customDataFormattersEnabled = 1;
