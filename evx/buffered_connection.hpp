@@ -70,6 +70,14 @@ namespace evx
 		evx_timer timer_watcher;
 		handler event_handler;
 
+		// cleans up closed connections
+		struct cleanup_handler
+		{
+			void operator()(struct ev_loop *loop, evx_check *watcher, int revents);
+		};
+		friend struct cleanup_handler;
+		static evx_check cleanup_watcher;
+		
 	protected:
 		buffered_connection(struct ev_loop *c_loop, int c_socket, client_handler_ptr c_client_handler);
 	
@@ -84,6 +92,8 @@ namespace evx
 		}
 	
 		~buffered_connection();
+		
+		static void register_cleanup(struct ev_loop *loop);
 	
 		bool closed() const
 		{
