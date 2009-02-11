@@ -24,7 +24,7 @@ int main()
 	setsockopt(listen_socket, SOL_SOCKET, SO_REUSEADDR, &on, sizeof(on));
 	
 	listen_addr.sin_family = AF_INET;
-	listen_addr.sin_port = htons(5432);
+	listen_addr.sin_port = htons(8079);
 	bind(listen_socket, reinterpret_cast<struct sockaddr*>(&listen_addr), sizeof(listen_addr));
 	listen(listen_socket, 5);
 	
