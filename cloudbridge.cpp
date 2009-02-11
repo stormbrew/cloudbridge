@@ -37,5 +37,7 @@ int main()
 	ev_io_set(&listen_watcher, listen_socket, EV_READ);
 	ev_io_start(loop, &listen_watcher);
 	
+	buffered_connection::register_cleanup(loop);
+	
 	ev_loop(loop, 0);
 }

@@ -21,6 +21,25 @@ namespace evx
 {
 	buffered_connection::connection_pool buffered_connection::connections;
 	buffered_connection::connection_list buffered_connection::closed_connections;
+	evx_check buffered_connection::cleanup_watcher;
+	
+	void buffered_connection::cleanup_handler::operator()(struct ev_loop *loop, evx_check *watcher, int revents)
+	{
+		typedef buffered_connection::connection_list list;
+		typedef buffered_connection::connection_pool pool;
+		
+		for (list::iterator it = buffered_connection::closed_connections.begin(); it != buffered_connection::closed_connections.end();)
+		{
+			buffered_connection::connections.erase(*it);
+			it = buffered_connection::closed_connections.erase(it);
+		}
+	}
+	
+	void buffered_connection::register_cleanup(struct ev_loop *loop)
+	{
+		evx_init(&cleanup_watcher, cleanup_handler());
+		ev_check_start(loop, &cleanup_watcher);
+	}
 
 	buffered_connection::buffered_connection(struct ev_loop *c_loop, int c_socket, client_handler_ptr c_client_handler)
 		: loop(c_loop), socket(c_socket), client_handler(c_client_handler), event_handler(*this), 

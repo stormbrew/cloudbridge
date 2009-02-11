@@ -8,7 +8,7 @@ ALL_SOURCE = ${EVX_SOURCE} ${CLOUDBRIDGE_SOURCE}
 ALL = ${ALL_HEADERS} ${ALL_SOURCE}
 
 cloudbridge: ${ALL}
-	g++ -I/opt/local/include -L/opt/local/lib -lev -o cloudbridge ${ALL_SOURCE}
+	g++ -O3 -I/opt/local/include -L/opt/local/lib -lev -o cloudbridge ${ALL_SOURCE}
 
 all:
 	cloudbridge
