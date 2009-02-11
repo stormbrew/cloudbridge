@@ -23,7 +23,7 @@ only be matched in the absence of a fully matching domain name, and it is recomm
 A server MAY require the hosts to be accompanied by a signature which is calculated by SHA1(host+shared secret) where shared secret is a
 string known by the server. This is to allow for bridging relatively untrusted clients. The client may be given a list of hosts and keys
 they can map to, and they will not be able to use their access to the server to subvert other domains on the same network. A key for a
-particular domain *will* give authentication to all keys below it.
+particular domain *will* give authentication to all hosts below it.
 
 The client also MUST pass an Expect: 100-continue header to the server to indicate its willingness to accept 100 status messages while
 pending a match. The bridge server MAY use 100 statuses to ensure that the bridge client has not gone away while waiting to be matched.
