@@ -270,7 +270,6 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>1</integer>
 									<integer>0</integer>
 								</array>
 							</array>
@@ -305,6 +304,8 @@
 					<key>Dock</key>
 					<array>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -322,7 +323,7 @@
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>BF1CDB0F0F41766E0020001F</string>
+										<string>BF1CDB1D0F42991D0020001F</string>
 										<key>history</key>
 										<array>
 											<string>BF1CDAC90F3F55930020001F</string>
@@ -356,8 +357,6 @@
 							<string>489pt</string>
 						</dict>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -530,14 +529,12 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>BF1CDB100F41766E0020001F</string>
-		<string>BF1CDB110F41766E0020001F</string>
 		<string>BF1CDAD90F3F55930020001F</string>
 		<string>BF1CDADA0F3F55930020001F</string>
 		<string>1C78EAAD065D492600B07095</string>
 		<string>BF2299540F3B940200B40845</string>
-		<string>/Users/graham/code/cloudbridge/cloudbridge-xc.xcodeproj</string>
 		<string>1CD10A99069EF8BA00B06720</string>
+		<string>/Users/graham/code/cloudbridge/cloudbridge-xc.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
 	<string>333 172 1075 856 0 0 1680 1028 </string>
