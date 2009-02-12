@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include <iostream>
+#include <fstream>
 #include <map>
 #include <string>
 #include <tr1/unordered_set>
@@ -21,18 +22,35 @@ using namespace evx;
 
 int usage(const std::string &exec_name)
 {
-	std::cout << exec_name << " [address1]:[port1] .. [addressN]:[portN] [-h] [-s host_secret_key]" << std::endl;
+	std::cout << exec_name << " [address1]:[port1] .. [addressN]:[portN] [-h] [-s secret_key_file]" << std::endl;
 	std::cout << std::endl;
 	std::cout << "\t-h\tShow this help screen." << std::endl;
-	std::cout << "\t-s\tSet the secret key required for backends to authenticate." << std::endl;
+	std::cout << "\t-s\tFile that contains timestamp:secret_key pairs" << std::endl;
 	
 	return 1;
+}
+
+typedef std::map<int, std::string> secret_map;
+// Loads secret timestamp and secret key pairs from filename.
+secret_map load_secret_keys(const std::string &filename)
+{
+	secret_map keys;
+	std::ifstream file(filename.c_str());
+	if (!file.is_open())
+		return keys;
+	std::string line;
+	while (!std::getline(file, line).eof())
+	{
+		std::vector<std::string> timekey = split(line, ":", 2);
+		keys[atoi(timekey[0].c_str())] = timekey[1];
+	}
+	return keys;
 }
 
 int main(int argc, char **argv)
 {
 	std::list<std::string> addresses;
-	std::string host_secret_key;
+	std::string host_secret_key_filename, host_secret_key;
 	std::string exename = argv[0];
 	
 	argc--;
@@ -49,14 +67,14 @@ int main(int argc, char **argv)
 	{
 		addresses.push_back("*:8079");
 	}
-	
+
 	char flag;
-	while ((flag = getopt(argc - 1, argv + 1, "s:h")) != -1)
+	while ((flag = getopt(argc+1, argv-1, "s:h")) != -1)
 	{
 		switch (flag)
 		{
 		case 's':
-			host_secret_key = optarg;
+			host_secret_key_filename = optarg;
 			break;
 			
 		case 'h':
@@ -64,6 +82,26 @@ int main(int argc, char **argv)
 		default:
 			return usage(exename);
 		}
+	}
+	
+	if (host_secret_key_filename.length() > 0)
+	{
+		// TODO: Make this do something more useful.
+		secret_map secrets = load_secret_keys(host_secret_key_filename);
+		if (secrets.size() == 0)
+		{
+			printf("Secrets file had no data or did not exist\n");
+			return usage(exename);
+		}
+		secret_map::iterator it = secrets.lower_bound(time(NULL));
+		if (it == secrets.begin())
+		{
+			printf("Couldn't find valid secret in secrets file.\n");
+			return usage(exename);
+		}
+		it--; // we actually want the one before what lower bound returns.
+		host_secret_key = it->second;
+		printf("Running in secure mode (with key from %d)\n", it->first);
 	}
 	
 	struct ev_loop *loop = ev_default_loop(0);
