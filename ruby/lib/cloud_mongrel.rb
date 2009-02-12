@@ -28,7 +28,6 @@ module Mongrel
 			if (!listen_hosts && listen_host_keys) # if we got only one array argument at the end, make it the hosts not the keys.
 				listen_hosts, listen_host_keys = listen_host_keys, listen_hosts
 			end
-			puts(listen_hosts, listen_host_keys, ENV['CLOUD_HOSTS'], ENV['CLOUD_KEYS'])
 			# last but not least, get them from the environment or provide sensible defaults.
 			listen_hosts ||= (ENV['CLOUD_HOSTS'] && ENV['CLOUD_HOSTS'].split(',')) || ["*"]
 			listen_keys ||= (ENV['CLOUD_KEYS'] && ENV['CLOUD_KEYS'].split(',')) || []
