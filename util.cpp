@@ -11,13 +11,17 @@ std::vector<std::string> split(const std::string &str, const std::string &split_
 	typedef std::vector<std::string> string_list;
 	string_list res;
 	
-	std::string::const_iterator it = str.begin();
+	std::string::const_iterator it = str.begin(), next_it;
 	while (it != str.end())
 	{
 		res.push_back(std::string());
 		std::string &part = res.back();
 		
-		std::string::const_iterator next_it = std::search(it, str.end(), split_by.begin(), split_by.end());
+		if (--max_count) // only search for the next split token if we're supposed to be finding more.
+ 			next_it = std::search(it, str.end(), split_by.begin(), split_by.end());
+		else
+			next_it = str.end();
+			
 		std::copy(it, next_it, std::back_inserter(part));
 		if (next_it != str.end()) // if we found an instance of split_by, we want to move forward to skip that as well.
 			it = next_it + split_by.length();
