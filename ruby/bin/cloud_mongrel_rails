@@ -1,5 +1,35 @@
 #!/usr/bin/env ruby
 require 'cloud_mongrel'
 
+if ENV['CLOUD_HOSTS']
+	cloud_hosts = ENV['CLOUD_HOSTS'].split(',') 
+else
+	cloud_hosts = []
+end	
+if ENV['CLOUD_KEYS']
+	cloud_keys = ENV['CLOUD_KEYS'].split(',')
+else
+	cloud_keys = []
+end
+
+# Look for our added arguments (-H and -K)
+remove = []
+ARGV.each_with_index {|arg, idx|
+	case arg
+	when '-H'
+		cloud_hosts.push(ARGV[idx+1])
+		remove.push(idx)
+		remove.push(idx + 1)
+	when '-K'
+		cloud_keys.push(ARGV[idx+1])
+		remove.push(idx)
+		remove.push(idx +1)
+	end
+}
+remove.reverse_each {|idx| ARGV.delete_at(idx) }
+
+ENV['CLOUD_HOSTS'] = (cloud_hosts.length() > 0 && cloud_hosts.join(',')) || nil
+ENV['CLOUD_KEYS'] = (cloud_keys.length() > 0 && cloud_keys.join(',')) || nil
+
 # just load the native mongrel version and let it do its thing with our overloaded mongrel class.
 load 'mongrel_rails'
