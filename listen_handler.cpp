@@ -12,5 +12,5 @@ void listen_handler::operator()(struct ev_loop *loop, evx_io *watcher, int reven
 	socklen_t addr_len = sizeof(remote_addr);
 	int socket = accept(listen_socket, reinterpret_cast<struct sockaddr*>(&remote_addr), &addr_len);
 	
-	buffered_connection::create_connection(loop, socket, buffered_connection::client_handler_ptr(new connection_finder(connections)));
+	buffered_connection::create_connection(loop, socket, buffered_connection::client_handler_ptr(new connection_finder(connections, host_key_secret)));
 }

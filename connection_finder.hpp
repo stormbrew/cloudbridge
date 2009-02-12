@@ -30,6 +30,15 @@ private:
 	header_list headers;
 	std::list<std::string> hosts;
 	
+	struct host_key_info
+	{
+		std::string hash, timestamp, host;
+		explicit host_key_info(const std::string &host_key);
+		bool validate(const std::string &secret, std::string client_host);
+	};
+	std::string host_key_secret;
+	std::list<host_key_info> host_keys;
+	
 	bool read_headers(evx::buffered_connection &con);
 	void parse_hosts();
 	
@@ -41,8 +50,8 @@ private:
 	void error(evx::buffered_connection &con, int error_number, const std::string &name, const std::string &text);
 
 public:	
-	connection_finder(std::tr1::shared_ptr<connection_pool> c_pool)
-	 : pool(c_pool), connection_type(type_unknown)
+	connection_finder(std::tr1::shared_ptr<connection_pool> c_pool, const std::string &c_secret)
+	 : pool(c_pool), connection_type(type_unknown), host_key_secret(c_secret)
 	{}
 	
 	// public because on failure, a backend connection will have to manipulate the

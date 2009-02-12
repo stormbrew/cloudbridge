@@ -32,8 +32,10 @@ int main()
 	
 	printf("Event Loop initialized: Using backend %d\n", ev_backend(loop));
 	
+	std::string host_key_secret = "blahblahblorp";
+	
 	evx_io listen_watcher;
-	evx_init(&listen_watcher, listen_handler(listen_socket));
+	evx_init(&listen_watcher, listen_handler(listen_socket, host_key_secret));
 	ev_io_set(&listen_watcher, listen_socket, EV_READ);
 	ev_io_start(loop, &listen_watcher);
 	

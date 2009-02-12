@@ -13,6 +13,7 @@
 			BF2299FF0F3BAB4400B40845 /* buffered_connection.hpp:95 */,
 			BF1CDAC60F3F557C0020001F /* cloudbridge.cpp:20 */,
 			BF1CDB060F4175DF0020001F /* chat_handler.cpp:51 */,
+			BF1CDB250F43CDDB0020001F /* connection_finder.cpp:126 */,
 		);
 		codeSenseManager = BF2299490F3B93CB00B40845 /* Code sense */;
 		executables = (
@@ -89,6 +90,9 @@
 			BF1CDB0F0F41766E0020001F /* PBXTextBookmark */ = BF1CDB0F0F41766E0020001F /* PBXTextBookmark */;
 			BF1CDB130F428F120020001F /* PBXTextBookmark */ = BF1CDB130F428F120020001F /* PBXTextBookmark */;
 			BF1CDB1D0F42991D0020001F /* PBXTextBookmark */ = BF1CDB1D0F42991D0020001F /* PBXTextBookmark */;
+			BF1CDB1E0F43C3D70020001F /* PBXTextBookmark */ = BF1CDB1E0F43C3D70020001F /* PBXTextBookmark */;
+			BF1CDB270F43CDE80020001F /* PBXTextBookmark */ = BF1CDB270F43CDE80020001F /* PBXTextBookmark */;
+			BF1CDB2A0F43D42D0020001F /* PBXTextBookmark */ = BF1CDB2A0F43D42D0020001F /* PBXTextBookmark */;
 		};
 		sourceControlManager = BF2299480F3B93CB00B40845 /* Source Control */;
 		userBuildSettings = {
@@ -102,16 +106,16 @@
 	};
 	BF1CDAAC0F3D67D50020001F /* chat_handler.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {986, 1288}}";
-			sepNavSelRange = "{2336, 0}";
-			sepNavVisRange = "{1933, 584}";
+			sepNavIntBoundsRect = "{{0, 0}, {986, 1372}}";
+			sepNavSelRange = "{3346, 0}";
+			sepNavVisRange = "{1635, 714}";
 		};
 	};
 	BF1CDAAE0F3D67D50020001F /* connection_finder.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {806, 4270}}";
-			sepNavSelRange = "{5525, 0}";
-			sepNavVisRange = "{5290, 1025}";
+			sepNavIntBoundsRect = "{{0, 0}, {806, 5152}}";
+			sepNavSelRange = "{10771, 0}";
+			sepNavVisRange = "{4896, 1019}";
 		};
 	};
 	BF1CDAC60F3F557C0020001F /* cloudbridge.cpp:20 */ = {
@@ -128,7 +132,7 @@
 		ignoreCount = 0;
 		lineNumber = 20;
 		location = "cloudbridge-xc";
-		modificationTime = 255948394.190189;
+		modificationTime = 256101855.679275;
 		state = 1;
 	};
 	BF1CDAC90F3F55930020001F /* PBXTextBookmark */ = {
@@ -285,11 +289,11 @@
 		delayBeforeContinue = 0;
 		fileReference = BF1CDAAC0F3D67D50020001F /* chat_handler.cpp */;
 		functionName = "chat_handler::data_readable(buffered_connection &con)";
-		hitCount = 1;
+		hitCount = 0;
 		ignoreCount = 0;
 		lineNumber = 51;
 		location = "cloudbridge-xc";
-		modificationTime = 255948399.978342;
+		modificationTime = 256101854.253482;
 		state = 1;
 	};
 	BF1CDB090F4175EC0020001F /* PBXTextBookmark */ = {
@@ -342,6 +346,53 @@
 		vrLen = 1025;
 		vrLoc = 5290;
 	};
+	BF1CDB1E0F43C3D70020001F /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = BF1CDAAE0F3D67D50020001F /* connection_finder.cpp */;
+		name = "connection_finder.cpp: 332";
+		rLen = 0;
+		rLoc = 9889;
+		rType = 0;
+		vrLen = 851;
+		vrLoc = 5370;
+	};
+	BF1CDB250F43CDDB0020001F /* connection_finder.cpp:126 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = BF1CDAAE0F3D67D50020001F /* connection_finder.cpp */;
+		functionName = "connection_finder::host_key_info::validate(const std::string &secret, std::string client_host)";
+		hitCount = 2;
+		ignoreCount = 0;
+		lineNumber = 126;
+		location = "cloudbridge-xc";
+		modificationTime = 256101877.172936;
+		state = 1;
+	};
+	BF1CDB270F43CDE80020001F /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = BF1CDAAE0F3D67D50020001F /* connection_finder.cpp */;
+		name = "connection_finder.cpp: 353";
+		rLen = 0;
+		rLoc = 10991;
+		rType = 0;
+		vrLen = 1036;
+		vrLoc = 5096;
+	};
+	BF1CDB2A0F43D42D0020001F /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = BF1CDAAE0F3D67D50020001F /* connection_finder.cpp */;
+		name = "connection_finder.cpp: 352";
+		rLen = 0;
+		rLoc = 10771;
+		rType = 0;
+		vrLen = 1019;
+		vrLoc = 4896;
+	};
 	BF2299450F3B93BC00B40845 /* cloudbridge-xc */ = {
 		isa = PBXExecutable;
 		activeArgIndices = (
@@ -349,7 +400,7 @@
 		argumentStrings = (
 		);
 		autoAttachOnCrash = 1;
-		breakpointsEnabled = 0;
+		breakpointsEnabled = 1;
 		configStateDict = {
 		};
 		customDataFormattersEnabled = 1;
@@ -443,7 +494,7 @@
 		ignoreCount = 0;
 		lineNumber = 54;
 		location = "cloudbridge-xc";
-		modificationTime = 255948392.856884;
+		modificationTime = 256101854.253446;
 		state = 2;
 	};
 	BF2299F80F3BAB0E00B40845 /* buffered_connection.hpp:178 */ = {
@@ -460,7 +511,7 @@
 		ignoreCount = 0;
 		lineNumber = 178;
 		location = "cloudbridge-xc";
-		modificationTime = 255948392.856899;
+		modificationTime = 256101854.253462;
 		state = 2;
 	};
 	BF2299FF0F3BAB4400B40845 /* buffered_connection.hpp:95 */ = {
@@ -477,12 +528,12 @@
 		ignoreCount = 0;
 		lineNumber = 95;
 		location = "cloudbridge-xc";
-		modificationTime = 255948392.856905;
+		modificationTime = 256101854.253469;
 		state = 2;
 	};
 	BF5423120F3BCA5C00B5E5BE /* cloudbridge.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {986, 602}}";
+			sepNavIntBoundsRect = "{{0, 0}, {986, 672}}";
 			sepNavSelRange = "{340, 0}";
 			sepNavVisRange = "{173, 542}";
 		};

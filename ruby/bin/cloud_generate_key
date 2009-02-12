@@ -1,0 +1,9 @@
+#!/usr/bin/env ruby
+
+if (!ARGV[0] || !ARGV[1])
+	puts("Usage: #{$0} secret_key hostname.com")
+	exit
+end
+
+require 'cloudbridge'
+puts CloudBridge.generate_key(ARGV[0], ARGV[1])
