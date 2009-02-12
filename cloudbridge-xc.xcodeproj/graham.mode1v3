@@ -323,7 +323,7 @@
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>BF1CDB1D0F42991D0020001F</string>
+										<string>BF1CDB2A0F43D42D0020001F</string>
 										<key>history</key>
 										<array>
 											<string>BF1CDAC90F3F55930020001F</string>
@@ -533,8 +533,8 @@
 		<string>BF1CDADA0F3F55930020001F</string>
 		<string>1C78EAAD065D492600B07095</string>
 		<string>BF2299540F3B940200B40845</string>
-		<string>1CD10A99069EF8BA00B06720</string>
 		<string>/Users/graham/code/cloudbridge/cloudbridge-xc.xcodeproj</string>
+		<string>1CD10A99069EF8BA00B06720</string>
 	</array>
 	<key>WindowString</key>
 	<string>333 172 1075 856 0 0 1680 1028 </string>

@@ -2,7 +2,7 @@ $: << "../lib"
 
 require "cloudserver"
 
-server = CloudServer.new(ARGV[0], "5432")
+server = CloudBridge::Server.new(ARGV[0], "5432")
 threads = []
 ARGV[1].to_i.times {|threadid|
 	threads.push Thread.new {

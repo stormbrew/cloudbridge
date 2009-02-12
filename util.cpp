@@ -6,9 +6,9 @@
 #include <algorithm>
 #include "util.hpp"
 
-std::list<std::string> split(const std::string &str, const std::string &split_by, unsigned int max_count = UINT_MAX)
+std::vector<std::string> split(const std::string &str, const std::string &split_by, unsigned int max_count = UINT_MAX)
 {
-	typedef std::list<std::string> string_list;
+	typedef std::vector<std::string> string_list;
 	string_list res;
 	
 	std::string::const_iterator it = str.begin();
@@ -45,7 +45,7 @@ std::string sha1_str(const std::string &str)
 	// this is evil evil evil, but much better than the alternatives.
 	snprintf(&*res.begin(), 41, "%.2x%.2x%.2x%.2x%.2x%.2x%.2x%.2x%.2x%.2x%.2x%.2x%.2x%.2x%.2x%.2x%.2x%.2x%.2x%.2x",
 		vec[0], vec[1], vec[2], vec[3], vec[4], vec[5], vec[6], vec[7], vec[8], vec[9],
-		vec[10], vec[11], vec[12], vec[13], vec[15], vec[16], vec[17], vec[18], vec[19]);
+		vec[10], vec[11], vec[12], vec[13], vec[14], vec[15], vec[16], vec[17], vec[18], vec[19]);
 	
 	res.resize(40);
 	

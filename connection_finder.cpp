@@ -2,6 +2,7 @@
 
 #include "connection_finder.hpp"
 #include "chat_handler.hpp"
+#include "util.hpp"
 
 using namespace evx;
 
@@ -109,12 +110,48 @@ bool connection_finder::read_headers(buffered_connection &con)
 	return false;
 }
 
+connection_finder::host_key_info::host_key_info(const std::string &host_key)
+{
+	std::vector<std::string> components = split(host_key, ":", 3);
+	if (components.size() == 3)
+	{
+		hash = components[0];
+		timestamp = components[1];
+		host = components[2];
+	}
+}
+
+bool connection_finder::host_key_info::validate(const std::string &secret, std::string client_host)
+{
+	if (client_host != host)
+	{
+		// we want to see if client_host is a subdomain of host. To do that,
+		// we want to do a reverse string match on ".#{client_host}" to host.
+		// if their ends match that, then we're good.
+		if (client_host.length() <= host.length()) // but first, if client_host isn't longer than host,
+			return false; // bail.
+		
+		std::string prefixed_host = ".";
+		prefixed_host += host;
+		if (!std::equal(prefixed_host.rbegin(), prefixed_host.rend(), client_host.rbegin()))
+			return false;
+	}
+	
+	// now check if the hash in question is actually real. (saved for last because it's the more expensive op)
+	std::string compare = secret;
+	compare += ":" + timestamp + ":" + host;
+	std::string real_hash = sha1_str(compare);
+	return real_hash == hash;
+}
+
 void connection_finder::parse_hosts()
 {
 	for (header_list::iterator it = headers.begin(); it != headers.end(); it++)
 	{
 		if (it->first == "Host")
 			hosts.push_back(it->second);
+		else if (it->first == "Host-Key")
+			host_keys.push_back(host_key_info(it->second));
 	}
 }
 
@@ -171,6 +208,21 @@ void connection_finder::data_readable(buffered_connection &con)
 			return error(con, 404, "Not Found", "No Host specified. This server requires a host to be chosen.");
 		
 		connection_type = method == "BRIDGE"? type_bridge : type_client;
+		if (connection_type == type_bridge && host_key_secret.length() > 0)
+		{
+			for (std::list<std::string>::iterator host_it = hosts.begin(); host_it != hosts.end(); host_it++)
+			{
+				bool valid = false;
+				// validate the host keys against the shared secret.
+				for (std::list<host_key_info>::iterator key_it = host_keys.begin(); key_it != host_keys.end(); key_it++)
+				{
+					if (valid = key_it->validate(host_key_secret, *host_it))
+						break;
+				}
+				if (!valid)
+					return error(con, 401, "Access Denied", "Host key did not check out. Has it expired?");
+			}
+		}
 		
 		set_timeout_by_type(con);
 		
@@ -249,6 +301,7 @@ void connection_finder::error(evx::buffered_connection &con, int error_number, c
 	str << "\r\n";
 	str << text;
 	con.write(str.str());
+	unregister_connection(con);
 	con.shutdown();
 }
 
