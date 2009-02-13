@@ -1,0 +1,37 @@
+CloudBridge
+---
+Cloudbridge is a server that sits between your front-end webservers (apache/nginx/etc) and
+your application servers (currently rails using mongrel). It has the advantage over traditional
+appserver clustering techniques of limiting the amount of configuration required while also improving
+worst case behaviour.
+
+In the traditional setup, you have a frontend server doing reverse proxy requests to backend app servers.
+This setup is a huge win over directly exposing your backend servers because it allows for load
+balancing, optimized resource usage (heavy on memory backends aren't sitting idle waiting for
+a client to close their connection), and good scalability (since you can add backend nodes with no 
+external configuration changes).
+
+However, this configuration has the disadvantage of causing an increase in maintenance effort
+in that when a backend is disabled or goes down unexpectedly, the frontend server must either
+be told about this or discover it. If it does not, this usually results in hung connections
+or broken requests for the user at worst, or extremely more complex frontend servers at best.
+
+Cloudbridge works to avoid this situation by reversing the connection to the backend. It is
+a reverse-reverse proxy. In cloudbridge's system, the backends and frontends both connect
+to cloudbridge, and it matches connections based on hostname. When a backend goes down or
+comes up, it simply stops or starts sending requests to cloudbridge, and no additional
+configuration is needed.
+
+Cloudbridge is not the only solution to employ this technique. At the very least, there is
+also swiftiply and probably other more proprietary solutions. Where cloudbridge goes one
+step beyond swiftiply is in the fact that it requires no configuration for backend hosts.
+By using an HTTP protocol extension (the BRIDGE request documented in doc/protocol.txt),
+it allows the backend to specify what host it is listening for. This makes setting up
+a hosting cluster extremely easy. 
+
+In order to prevent unauthorized access to a domain, the cloudbridge server may be configured
+to require a key to be presented to the server in the BRIDGE request that authenticates its
+ownership over that host name.
+
+This allows also for the open-cloudbridge technique, which is demonstrated on oncloud.org. You
+can use oncloud.org to experiment with the system. Instructions are presented there.
