@@ -1,3 +1,3 @@
 #!/bin/sh
 exec 2>&1
-exec ./cloudbridge
+exec ./cloudbridge -s ./secret.keys oncloud.org:8079 localhost:8079
