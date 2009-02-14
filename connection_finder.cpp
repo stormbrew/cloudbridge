@@ -6,15 +6,16 @@
 
 using namespace evx;
 
-void connection_finder::register_connection(buffered_connection &con)
+bool connection_finder::register_connection(buffered_connection &con)
 {
 	for (std::list<std::string>::iterator it = hosts.begin(); it != hosts.end(); it++)
 	{
 		if (connection_type == type_bridge)
-			pool->register_bridge(*it, con.shared_from_this());
+			return pool->register_bridge(*it, con.shared_from_this());
 		else if (connection_type == type_client)
 			pool->register_client(*it, con.shared_from_this());
 	}
+  return true;
 }
 void connection_finder::unregister_connection(buffered_connection &con)
 {
@@ -275,7 +276,8 @@ void connection_finder::find_connection(buffered_connection &con)
 		else
 			other_finder->morph(*other_con, con.shared_from_this());
 	} else {
-		register_connection(con);
+		if (!register_connection(con))
+      return error(con, 503, "Service Unavailable", "There were too many connections attempted for this host.");
 	}
 }
 
@@ -330,14 +332,20 @@ connection_pool::find_in(const std::string &host, connection_pool::connection_ho
 	return connection();
 }
 
-void
-connection_pool::register_in(const std::string &host, connection_pool::connection con, connection_pool::connection_host_map &map)
+bool
+connection_pool::register_in(const std::string &host, connection_pool::connection con, connection_pool::connection_host_map &map, unsigned int limit)
 {
 	connection_host_map::iterator host_it = map.find(host);
 	if (host_it == map.end())
 		host_it = map.insert(connection_host_map::value_type(host, connection_list())).first;
-		
-	host_it->second.insert(con);
+
+	if (limit == 0 || host_it->second.size() < limit)
+	{
+	  host_it->second.insert(con);
+    return true;
+  } else {
+    return false;
+  }
 }
 void
 connection_pool::unregister_in(const std::string &host, connection_pool::connection con, connection_pool::connection_host_map &map)

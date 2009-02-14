@@ -18,9 +18,9 @@ private:
 	std::string host_key_secret;
 	
 public:
-	listen_handler(int c_listen_socket, const std::string &c_secret, connection_pool::ptr c_connections = connection_pool::ptr())
+	listen_handler(int c_listen_socket, const std::string &c_secret, connection_pool::ptr c_connections)
 	 : listen_socket(c_listen_socket), host_key_secret(c_secret),
-	   connections(c_connections? c_connections : connection_pool::ptr(new connection_pool))
+	   connections(c_connections)
 	{}
 	
 	void operator()(struct ev_loop *loop, evx_io *watcher, int revents);

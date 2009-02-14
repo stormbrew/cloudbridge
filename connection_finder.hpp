@@ -44,7 +44,7 @@ private:
 	
 	void set_timeout_by_type(evx::buffered_connection &con);
 	
-	void register_connection(evx::buffered_connection &this_con);
+	bool register_connection(evx::buffered_connection &this_con);
 	void unregister_connection(evx::buffered_connection &this_con);
 	
 	void error(evx::buffered_connection &con, int error_number, const std::string &name, const std::string &text);
@@ -79,21 +79,27 @@ private:
 	typedef std::set<weak_connection> connection_list;
 	typedef std::tr1::unordered_map<std::string, connection_list> connection_host_map;
 	
+  unsigned int connection_limit;
+	
 	connection_host_map client_pool;
 	connection_host_map bridge_pool;
 	
 	connection find_in(const std::string &host, connection_host_map &map);
-	void register_in(const std::string &host, connection con, connection_host_map &map);
+	bool register_in(const std::string &host, connection con, connection_host_map &map, unsigned int limit);
 	void unregister_in(const std::string &host, connection con, connection_host_map &map);
 	
 public:
+  connection_pool(unsigned int c_connection_limit)
+   : connection_limit(c_connection_limit)
+  {}
+  
 	connection find_client(const std::string &host) { return find_in(host, client_pool); }
 	connection find_bridge(const std::string &host) { return find_in(host, bridge_pool); }
 	
 	void unregister_client(const std::string &host, connection con) { unregister_in(host, con, client_pool); }
-	void register_client(const std::string &host, connection con) { register_in(host, con, client_pool); }
+	void register_client(const std::string &host, connection con) { register_in(host, con, client_pool, 0); }
 	void unregister_bridge(const std::string &host, connection con) { unregister_in(host, con, bridge_pool); }
-	void register_bridge(const std::string &host, connection con) { register_in(host, con, bridge_pool); }
+	bool register_bridge(const std::string &host, connection con) { return register_in(host, con, bridge_pool, connection_limit); }
 };
 
 #endif
