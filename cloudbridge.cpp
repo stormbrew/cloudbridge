@@ -22,10 +22,11 @@ using namespace evx;
 
 int usage(const std::string &exec_name)
 {
-	std::cout << exec_name << " [-h] [-s secret_key_file] [address1]:[port1] .. [addressN]:[portN]" << std::endl;
+	std::cout << exec_name << " [-h] [-s secret_key_file] [-L backend_limit] [address1]:[port1] .. [addressN]:[portN]" << std::endl;
 	std::cout << std::endl;
 	std::cout << "\t-h\tShow this help screen." << std::endl;
-	std::cout << "\t-s\tFile that contains timestamp:secret_key pairs" << std::endl;
+	std::cout << "\t-s\tFile that contains timestamp:secret_key pairs." << std::endl;
+  std::cout << "\t-L\tNumber of backends that can listen on a given backend at once." << std::endl;
 	
 	return 1;
 }
@@ -52,15 +53,20 @@ int main(int argc, char **argv)
 	std::list<std::string> addresses;
 	std::string host_secret_key_filename, host_secret_key;
 	std::string exename = argv[0];
+  unsigned int connection_limit = 0;
 	
 	char flag;
-	while ((flag = getopt(argc, argv, "s:h")) != -1)
+	while ((flag = getopt(argc, argv, "s:L:h")) != -1)
 	{
 		switch (flag)
 		{
 		case 's':
 			host_secret_key_filename = optarg;
 			break;
+			
+		case 'L':
+      connection_limit = atoi(optarg);
+      break;
 			
 		case 'h':
 		case '?':
@@ -108,7 +114,7 @@ int main(int argc, char **argv)
 	printf("Event Loop initialized: Using backend %d\n", ev_backend(loop));
 
 	std::list<evx_io> listen_watchers;
-	connection_pool::ptr connections(new connection_pool);
+	connection_pool::ptr connections(new connection_pool(connection_limit));
 	
 	for (std::list<std::string>::iterator it = addresses.begin(); it != addresses.end(); it++)
 	{
