@@ -22,7 +22,7 @@ using namespace evx;
 
 int usage(const std::string &exec_name)
 {
-	std::cout << exec_name << " [address1]:[port1] .. [addressN]:[portN] [-h] [-s secret_key_file]" << std::endl;
+	std::cout << exec_name << " [-h] [-s secret_key_file] [address1]:[port1] .. [addressN]:[portN]" << std::endl;
 	std::cout << std::endl;
 	std::cout << "\t-h\tShow this help screen." << std::endl;
 	std::cout << "\t-s\tFile that contains timestamp:secret_key pairs" << std::endl;
@@ -53,23 +53,8 @@ int main(int argc, char **argv)
 	std::string host_secret_key_filename, host_secret_key;
 	std::string exename = argv[0];
 	
-	argc--;
-	argv++;
-
-	while (argc && argv[0][0] != '-')
-	{
-		addresses.push_back(argv[0]);
-		argc--;
-		argv++;
-	}
-	
-	if (addresses.size() < 1)
-	{
-		addresses.push_back("*:8079");
-	}
-
 	char flag;
-	while ((flag = getopt(argc+1, argv-1, "s:h")) != -1)
+	while ((flag = getopt(argc, argv, "s:h")) != -1)
 	{
 		switch (flag)
 		{
@@ -84,6 +69,21 @@ int main(int argc, char **argv)
 		}
 	}
 	
+  argc -= optind;
+  argv += optind;
+	
+	while (argc && argv[0][0] != '-')
+	{
+		addresses.push_back(argv[0]);
+		argc--;
+		argv++;
+	}
+	
+	if (addresses.size() < 1)
+	{
+		addresses.push_back("*:8079");
+	}
+
 	if (host_secret_key_filename.length() > 0)
 	{
 		// TODO: Make this do something more useful.
