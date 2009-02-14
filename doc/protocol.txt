@@ -59,6 +59,9 @@ The following error conditions MAY be returned from a BRIDGE request:
   that does not actually act as a bridge server.
 - 501 Not Implemented: The server does not support one (or all) of the If- statements given. It may also be given on an incomplete 
   implementation that does not do prefix matching of the url component.
+- 503 Service Unavailable: The server is not currently accepting new connections for one or more of the hosts given. The server
+  MAY implement backend connection limits, and this signals that there are too many backends connected for the host. The client
+  SHOULD try again later.
 - 504 Gateway Timeout: The server was not able to find a match within a reasonable timeout (as configured by the server).
 
 Once the BRIDGE request has been replied to, the roles of client and server are immediately reversed. Once a 101 Upgrade request 
