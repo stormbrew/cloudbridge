@@ -15,9 +15,7 @@ rescue LoadError
 end
 
 module Mongrel
-	class HttpServer
-		alias_method(:native_initialize, :initialize)
-		
+	class BridgeHttpServer < HttpServer
 		# Modified to take 2 arguments at the end which are a list of hosts to listen for and a list of host-keys
 		# to send to the server to authenticate authority over those domains.
 		def initialize(*args)
@@ -29,16 +27,16 @@ module Mongrel
 				listen_hosts, listen_host_keys = listen_host_keys, listen_hosts
 			end
 			# last but not least, get them from the environment or provide sensible defaults.
-			listen_hosts ||= (ENV['CLOUD_HOSTS'] && ENV['CLOUD_HOSTS'].split(',')) || ["*"]
-			listen_keys ||= (ENV['CLOUD_KEYS'] && ENV['CLOUD_KEYS'].split(',')) || []
-				
+			listen_hosts ||= (ENV['BRIDGE_HOSTS'] && ENV['BRIDGE_HOSTS'].split(',')) || ["*"]
+			listen_host_keys ||= (ENV['BRIDGE_KEYS'] && ENV['BRIDGE_KEYS'].split(',')) || []
+
 			host, port = args[0], args[1]
 			args[0], args[1] = '0.0.0.0', 0 # make mongrel listen on a random port, we're going to close it after.
-			native_initialize(*args)
+			super(*args)
 			@host = host
 			@port = port
 			@socket.close
-			@socket = CloudBridge::Server.new(@host, @port, listen_hosts, listen_keys)
+			@socket = CloudBridge::Server.new(@host, @port, listen_hosts, listen_host_keys)
 		end
 	end
 end

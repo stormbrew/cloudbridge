@@ -1,6 +1,4 @@
 #!/usr/bin/env ruby
-require 'cloud_mongrel'
-
 if ENV['CLOUD_HOSTS']
 	cloud_hosts = ENV['CLOUD_HOSTS'].split(',') 
 else
@@ -28,8 +26,15 @@ ARGV.each_with_index {|arg, idx|
 }
 remove.reverse_each {|idx| ARGV.delete_at(idx) }
 
-ENV['CLOUD_HOSTS'] = (cloud_hosts.length() > 0 && cloud_hosts.join(',')) || nil
-ENV['CLOUD_KEYS'] = (cloud_keys.length() > 0 && cloud_keys.join(',')) || nil
+ENV['BRIDGE_HOSTS'] = (cloud_hosts.length() > 0 && cloud_hosts.join(',')) || nil
+ENV['BRIDGE_KEYS'] = (cloud_keys.length() > 0 && cloud_keys.join(',')) || nil
+
+# Replace the 'real' mongrel with the overloaded one
+require 'bridge_mongrel'
+module Mongrel
+  RealHttpServer = HttpServer
+  HttpServer = BridgeHttpServer
+end
 
 # just load the native mongrel version and let it do its thing with our overloaded mongrel class.
 load 'mongrel_rails'
