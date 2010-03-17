@@ -224,7 +224,7 @@ void connection_finder::data_readable(buffered_connection &con)
 			}
 		}
 		
-		con.write(header_version + " 100 Continue\r\n");
+		con.write("HTTP/1.1 100 Continue\r\n");
 		set_timeout_by_type(con);
 		
 		find_connection(con);
