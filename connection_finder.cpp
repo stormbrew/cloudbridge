@@ -208,23 +208,26 @@ void connection_finder::data_readable(buffered_connection &con)
 			return error(con, 404, "Not Found", "No Host specified. This server requires a host to be chosen.");
 		
 		connection_type = method == "BRIDGE"? type_bridge : type_client;
-		if (connection_type == type_bridge && host_key_secret.length() > 0)
+		if (connection_type == type_bridge)
 		{
-			for (std::list<std::string>::iterator host_it = hosts.begin(); host_it != hosts.end(); host_it++)
+			if (host_key_secret.length() > 0)
 			{
-				bool valid = false;
-				// validate the host keys against the shared secret.
-				for (std::list<host_key_info>::iterator key_it = host_keys.begin(); key_it != host_keys.end(); key_it++)
+				for (std::list<std::string>::iterator host_it = hosts.begin(); host_it != hosts.end(); host_it++)
 				{
-					if (valid = key_it->validate(host_key_secret, *host_it))
-						break;
+					bool valid = false;
+					// validate the host keys against the shared secret.
+					for (std::list<host_key_info>::iterator key_it = host_keys.begin(); key_it != host_keys.end(); key_it++)
+					{
+						if (valid = key_it->validate(host_key_secret, *host_it))
+							break;
+					}
+					if (!valid)
+						return error(con, 401, "Access Denied", "Host key did not check out. Has it expired?");
 				}
-				if (!valid)
-					return error(con, 401, "Access Denied", "Host key did not check out. Has it expired?");
 			}
+			con.write("HTTP/1.1 100 Continue\r\n\r\n");
 		}
 		
-		con.write("HTTP/1.1 100 Continue\r\n\r\n");
 		set_timeout_by_type(con);
 		
 		find_connection(con);
