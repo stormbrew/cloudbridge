@@ -17,8 +17,7 @@ A BRIDGE request is sent to the server asking the server to give it the next ava
 to it that matches the parameters in the BRIDGE request. A request matches if it matches ANY of the Host headers passed, prefix matches
 the url component of the BRIDGE request itself, and if it matches all If-* headers passed (see below on If-* headers).
 
-A wildcard host header of * may also be specified, which will accept a request for any host passed by the client. Wilcards will
-only be matched in the absence of a fully matching domain name, and it is recommended that you not mix use of the two.
+Hosts may also be specified that will match a wildcard prefix. Examples would include '*.blorp.com' matching 'www.blorp.com' and 'www.stuff.blorp.com'. The wilcard component MUST be the first part of the hostname, and there MUST only be one. A single * alone will match any host passed by the client. The wildcard is treated as part of the hostname for the purpose of generating a host-key. The interaction between a wildcard domain and a fully qualified domain that both match is implementation defined.
 
 A server MAY require the hosts to be accompanied by a signature which is calculated by SHA1(host+shared secret) where shared secret is a
 string known by the server. This is to allow for bridging relatively untrusted clients. The client may be given a list of hosts and keys
