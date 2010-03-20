@@ -237,6 +237,11 @@ void connection_finder::data_readable(buffered_connection &con)
 void connection_finder::find_connection(buffered_connection &con)
 {
 	connection_pool::connection other_con;
+	
+	// bail early if there are no Host headers
+	if (hosts.size() < 1)
+		return;
+	
 	if (connection_type == type_bridge)
 	{
 		for (std::list<std::string>::iterator it = hosts.begin(); it != hosts.end(); it++)
@@ -249,6 +254,20 @@ void connection_finder::find_connection(buffered_connection &con)
 		// client end can only register to one Host (and wildcard). To prevent future zaniness, we
 		// make sure that's all that's in the hosts list.
 		hosts.erase(++hosts.begin(), hosts.end());
+
+		// split it up by dots so we can build wildcards.
+		std::vector<std::string> host_parts = split(*hosts.begin(), ".");
+		
+		// build all the potentially matching sub-wildcards
+		std::vector<std::string>::iterator first = host_parts.begin()+1, last = host_parts.end();
+		while (last - first > 1)
+		{
+			std::string wc_host = "*.";
+			wc_host.append(join(first, last, "."));
+			hosts.push_back(wc_host);
+			first++;
+		}		
+		
 		hosts.push_back("*");
 		
 		for (std::list<std::string>::iterator it = hosts.begin(); it != hosts.end(); it++)

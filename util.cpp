@@ -1,4 +1,3 @@
-#include <climits>
 #include <stdio.h>
 #define LTC_SHA1
 #define SHA1
@@ -6,7 +5,7 @@
 #include <algorithm>
 #include "util.hpp"
 
-std::vector<std::string> split(const std::string &str, const std::string &split_by, unsigned int max_count = UINT_MAX)
+std::vector<std::string> split(const std::string &str, const std::string &split_by, unsigned int max_count)
 {
 	typedef std::vector<std::string> string_list;
 	string_list res;
