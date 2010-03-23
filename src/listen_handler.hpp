@@ -6,6 +6,7 @@
 #include "evx/buffered_connection.hpp"
 
 #include "connection_finder.hpp"
+#include "connection_pool.hpp"
 
 class listen_handler
 {
