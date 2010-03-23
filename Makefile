@@ -1,14 +1,25 @@
 EVX_HEADERS = evx/buffer.hpp evx/buffered_connection.hpp evx/evx.hpp
 EVX_SOURCE = evx/buffer.cpp evx/buffered_connection.cpp
-CLOUDBRIDGE_HEADERS = chat_handler.hpp connection_finder.hpp listen_handler.hpp util.hpp
-CLOUDBRIDGE_SOURCE = chat_handler.cpp cloudbridge.cpp connection_finder.cpp listen_handler.cpp util.cpp
+CLOUDBRIDGE_HEADERS = src/chat_handler.hpp src/connection_finder.hpp src/connection_pool.hpp src/listen_handler.hpp src/util.hpp
+CLOUDBRIDGE_SOURCE = src/chat_handler.cpp src/cloudbridge.cpp src/connection_pool.cpp src/connection_finder.cpp src/listen_handler.cpp src/util.cpp
 
 ALL_HEADERS = ${EVX_HEADERS} ${CLOUDBRIDGE_HEADERS}
 ALL_SOURCE = ${EVX_SOURCE} ${CLOUDBRIDGE_SOURCE}
-ALL = ${ALL_HEADERS} ${ALL_SOURCE}
+ALL_OBJECTS = ${ALL_SOURCE:.cpp=.o}
 
-cloudbridge: ${ALL}
-	g++ -O3 -I/opt/local/include -L/opt/local/lib -lev -ltomcrypt -o cloudbridge ${ALL_SOURCE}
+COMPILE = g++ -c -O3 -I/opt/local/include -Isrc -I.
+LINK = g++ -O3 -L/opt/local/lib -lev -ltomcrypt
 
+%.o: %.cpp ${ALL_HEADERS}
+	${COMPILE} -o $@ $<
+
+bin/cloudbridge: ${ALL_OBJECTS} ${ALL_HEADERS}
+	mkdir -p bin
+	${LINK} -o bin/cloudbridge ${ALL_OBJECTS}
+
+.PHONY: all clean
 all:
-	cloudbridge
+	bin/cloudbridge
+	
+clean:
+	-rm -f bin/cloudbridge ${ALL_OBJECTS}

@@ -15,6 +15,7 @@
 
 #include "listen_handler.hpp"
 #include "connection_finder.hpp"
+#include "connection_pool.hpp"
 #include "chat_handler.hpp"
 #include "util.hpp"
 
