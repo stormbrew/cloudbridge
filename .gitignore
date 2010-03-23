@@ -1,4 +1,6 @@
 *.xcodeproj
+*.o
 .hgignore
 supervise
 build
+bin
