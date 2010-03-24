@@ -1,7 +1,7 @@
 EVX_HEADERS = evx/buffer.hpp evx/buffered_connection.hpp evx/evx.hpp
 EVX_SOURCE = evx/buffer.cpp evx/buffered_connection.cpp
-CLOUDBRIDGE_HEADERS = src/chat_handler.hpp src/connection_finder.hpp src/connection_pool.hpp src/listen_handler.hpp src/util.hpp
-CLOUDBRIDGE_SOURCE = src/chat_handler.cpp src/cloudbridge.cpp src/connection_pool.cpp src/connection_finder.cpp src/listen_handler.cpp src/util.cpp
+CLOUDBRIDGE_HEADERS = src/chat_handler.hpp src/connection_finder.hpp src/connection_pool.hpp src/listen_handler.hpp src/util.hpp src/simple_stats_driver.hpp src/state_stats_driver.hpp
+CLOUDBRIDGE_SOURCE = src/chat_handler.cpp src/cloudbridge.cpp src/connection_pool.cpp src/connection_finder.cpp src/listen_handler.cpp src/util.cpp src/simple_stats_driver.cpp src/state_stats_driver.cpp
 
 ALL_HEADERS = ${EVX_HEADERS} ${CLOUDBRIDGE_HEADERS}
 ALL_SOURCE = ${EVX_SOURCE} ${CLOUDBRIDGE_SOURCE}
