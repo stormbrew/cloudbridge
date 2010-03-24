@@ -7,6 +7,12 @@
 
 using namespace evx;
 
+connection_finder::connection_finder(std::tr1::shared_ptr<connection_pool> c_pool, const std::string &c_secret)
+ : pool(c_pool), connection_type(type_unknown), host_key_secret(c_secret), 
+   state(c_pool->get_connection_stats(), "Connection State", '?')
+{}
+
+
 void connection_finder::register_connection(buffered_connection &con)
 {
 	for (std::list<std::string>::iterator it = hosts.begin(); it != hosts.end(); it++)
@@ -30,7 +36,7 @@ void connection_finder::unregister_connection(buffered_connection &con)
 
 void connection_finder::morph(buffered_connection &this_con, buffered_connection::ptr other_con)
 {
-	buffered_connection::client_handler_ptr new_handler(new chat_handler(other_con, connection_type));
+	buffered_connection::client_handler_ptr new_handler(new chat_handler(pool, other_con, connection_type));
 	this_con.set_client_handler(new_handler);
 }
 
@@ -152,7 +158,7 @@ void connection_finder::parse_hosts()
 		if (it->first == "Host")
 			hosts.push_back(it->second);
 		else if (it->first == "Host-Key")
-			host_keys.push_back(host_key_info(it->second));
+			host_key.reset(new host_key_info(it->second));
 	}
 }
 
@@ -200,7 +206,7 @@ void connection_finder::data_readable(buffered_connection &con)
 		return; // ignore input, let the chat handler pick it up later.
 		
 	con.reset_timeout();
-
+	
 	if (read_headers(con))
 	{
 		parse_hosts();
@@ -208,25 +214,37 @@ void connection_finder::data_readable(buffered_connection &con)
 		if (hosts.size() < 1)
 			return error(con, 404, "Not Found", "No Host specified. This server requires a host to be chosen.");
 		
-		connection_type = method == "BRIDGE"? type_bridge : type_client;
-		if (connection_type == type_bridge)
+		if (method == "BRIDGE")
 		{
+			connection_type = type_bridge;
+			state = 'b';
+
 			if (host_key_secret.length() > 0)
 			{
+				if (!host_key.get())
+					return error(con, 401, "Access Denied", "This server requires a host key.");
+				
 				for (std::list<std::string>::iterator host_it = hosts.begin(); host_it != hosts.end(); host_it++)
 				{
-					bool valid = false;
-					// validate the host keys against the shared secret.
-					for (std::list<host_key_info>::iterator key_it = host_keys.begin(); key_it != host_keys.end(); key_it++)
-					{
-						if (valid = key_it->validate(host_key_secret, *host_it))
-							break;
-					}
-					if (!valid)
-						return error(con, 401, "Access Denied", "Host key did not check out. Has it expired?");
+					// validate the host key against the shared secret.
+					if (!host_key->validate(host_key_secret, *host_it))
+						return error(con, 401, "Access Denied", "Host key did not check out for '" + *host_it + "'. Has it expired?");
 				}
 			}
+			// Note: we allow this to happen even if a secret key isn't set so you can gather stats without
+			// generating keys. Keys with empty hashes will trigger the host to be added to the known keys
+			// list and then client connections will look for it and register under them.
+			if (host_key.get())
+			{
+				pool->add_known_key(host_key->host);
+				host_state.reset(new state_counter_holder(pool->get_host_stats(), host_key->host, 'B'));
+			}
+			
 			con.write("HTTP/1.1 100 Continue\r\n\r\n");
+
+		} else {
+			connection_type = type_client;
+			state = 'c';
 		}
 		
 		set_timeout_by_type(con);
@@ -255,16 +273,25 @@ void connection_finder::find_connection(buffered_connection &con)
 		// client end can only register to one Host (and wildcard). To prevent future zaniness, we
 		// make sure that's all that's in the hosts list.
 		hosts.erase(++hosts.begin(), hosts.end());
+		
+		// find out if this is actually a request for stats, and if so send them and return.
+		if (hosts.front() == pool->get_stats_host())
+		{
+			state = 'I';
+			return pool->send_stats(con);
+		}
 
 		// split it up by dots so we can build wildcards.
 		std::vector<std::string> host_parts = split(*hosts.begin(), ".");
+		host_state.reset(new state_counter_holder(pool->get_host_stats(), *hosts.begin(), 'C'));
 		
 		// build all the potentially matching sub-wildcards
 		std::vector<std::string>::iterator first = host_parts.begin()+1, last = host_parts.end();
 		while (last - first > 1)
 		{
+			std::string part = join(first, last, ".");
 			std::string wc_host = "*.";
-			wc_host.append(join(first, last, "."));
+			wc_host.append(part);
 			hosts.push_back(wc_host);
 			first++;
 		}		
@@ -318,6 +345,7 @@ void connection_finder::socket_close(buffered_connection &con, int err)
 
 void connection_finder::error(evx::buffered_connection &con, int error_number, const std::string &name, const std::string &text)
 {
+	state = 'E';
 	std::stringstream str;
 	str << "HTTP/1.1 " << error_number << " " << name << "\r\n";
 	str << "Connection: close\r\n";

@@ -5,6 +5,8 @@
 #include <tr1/unordered_map>
 
 #include "evx/buffered_connection.hpp"
+#include "simple_stats_driver.hpp"
+#include "state_stats_driver.hpp"
 
 enum connection_type_t {
 	type_unknown,
@@ -37,7 +39,10 @@ private:
 		bool validate(const std::string &secret, std::string client_host);
 	};
 	std::string host_key_secret;
-	std::list<host_key_info> host_keys;
+	std::auto_ptr<host_key_info> host_key;
+	std::auto_ptr<state_counter_holder> host_state;
+	
+	state_counter_holder state;
 	
 	bool read_headers(evx::buffered_connection &con);
 	void parse_hosts();
@@ -50,9 +55,7 @@ private:
 	void error(evx::buffered_connection &con, int error_number, const std::string &name, const std::string &text);
 
 public:	
-	connection_finder(std::tr1::shared_ptr<connection_pool> c_pool, const std::string &c_secret)
-	 : pool(c_pool), connection_type(type_unknown), host_key_secret(c_secret)
-	{}
+	connection_finder(std::tr1::shared_ptr<connection_pool> c_pool, const std::string &c_secret);
 	
 	// public because on failure, a backend connection will have to manipulate the
 	// frontend connection depending on whether the backend is really available or not.
