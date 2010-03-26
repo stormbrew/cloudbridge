@@ -283,7 +283,9 @@ void connection_finder::find_connection(buffered_connection &con)
 
 		// split it up by dots so we can build wildcards.
 		std::vector<std::string> host_parts = split(*hosts.begin(), ".");
-		host_state.reset(new state_counter_holder(pool->get_host_stats(), *hosts.begin(), 'C'));
+		std::string key = pool->find_key(*hosts.begin());
+		if (key.size() > 0)
+			host_state.reset(new state_counter_holder(pool->get_host_stats(), key, 'C'));
 		
 		// build all the potentially matching sub-wildcards
 		std::vector<std::string>::iterator first = host_parts.begin()+1, last = host_parts.end();
