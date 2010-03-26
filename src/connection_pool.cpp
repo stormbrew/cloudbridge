@@ -59,14 +59,15 @@ std::string
 connection_pool::find_key(const std::string &host) const
 {
 	// TODO: Make this more efficient than a linear scan.
-	std::string prefixed_host = ".";
-	prefixed_host += host;
 	for (known_key_set::iterator it = known_keys.begin(); it != known_keys.end(); it++)
 	{
 		if (*it == host)
 			return *it;
-			
-		if (std::equal(prefixed_host.rbegin(), prefixed_host.rend(), it->rbegin()))
+		
+		std::string prefixed_host = ".";
+		prefixed_host += *it;
+
+		if (prefixed_host.length() >= it->length() && std::equal(prefixed_host.rbegin(), prefixed_host.rend(), host.rbegin()))
 			return *it;		
 	}
 	return "";
