@@ -16,6 +16,7 @@ void chat_handler::timeout(evx::buffered_connection &con)
 	buffered_connection::ptr other_ptr = other.lock();
 	std::tr1::shared_ptr<connection_finder> other_finder = other_ptr->get_client_handler<connection_finder>();
 	other_finder->find_connection(*other_ptr);
+	other = buffered_connection::weak_ptr();
 	con.error_close(0);	
 }
 
@@ -80,13 +81,13 @@ void chat_handler::end_other_end(buffered_connection &con)
 		if (other_ptr)
 			other_ptr->shutdown();
 		
-		other = buffered_connection::weak_ptr();
 		successful = false;
 	} else if (other_ptr) {
 		// let the other end find a new backend
 		std::tr1::shared_ptr<connection_finder> other_finder = other_ptr->get_client_handler<connection_finder>();
 		other_finder->find_connection(*other_ptr);
 	}
+	other = buffered_connection::weak_ptr();
 }
 void chat_handler::socket_shutdown(buffered_connection &con)
 {
