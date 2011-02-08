@@ -1,3 +1,4 @@
+#include <cstdio>
 #include "chat_handler.hpp"
 
 using namespace evx;
@@ -99,7 +100,7 @@ void chat_handler::socket_shutdown(buffered_connection &con)
 void chat_handler::socket_close(buffered_connection &con, int err)
 {
 	if (err)
-		printf("Proxied socket closed due to error, errno: 0x%x\n", err);
+                std::printf("Proxied socket closed due to error, errno: 0x%x\n", err);
 	
 	end_other_end(con);
 }

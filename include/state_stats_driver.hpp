@@ -2,6 +2,7 @@
 #define __STATE_STATS_DRIVER_GUARD__
 
 #include <tr1/unordered_map>
+#include <string>
 #include <map>
 
 class state_counter_holder;

@@ -2,5 +2,13 @@
 *.o
 .hgignore
 supervise
+
 build
 bin
+lib
+
+CMakeCache.txt
+CMakeFiles
+CMakeLists.txt.user
+cmake_install.cmake
+Makefile

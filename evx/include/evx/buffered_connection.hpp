@@ -1,6 +1,7 @@
 #ifndef __BUFFERED_CONNECTION_GUARD__
 #define __BUFFERED_CONNECTION_GUARD__
 
+#include <cstring>
 #include <string>
 #include <set>
 #include <list>
@@ -152,7 +153,7 @@ namespace evx
 	
 		void write(const char *str)
 		{
-			size_t len = strlen(str);
+                        size_t len = std::strlen(str);
 			write(str, str + len);
 		}
 	
