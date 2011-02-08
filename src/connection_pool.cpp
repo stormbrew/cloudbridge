@@ -1,4 +1,5 @@
 #include <sstream>
+#include <cstdio>
 #include "connection_finder.hpp"
 #include "connection_pool.hpp"
 #include "util.hpp"
@@ -23,7 +24,7 @@ connection_pool::find_in(const std::string &host, connection_pool::connection_ho
 				// remove the dead item from the list and move on.
 				list.erase(con_it);
 				con_it = list.begin();
-				printf("Warning: Reaped a dead reference to a connection in the list for %s. Could be lingering disconnected, or could have been improperly removed.\n", host.c_str());
+                                std::printf("Warning: Reaped a dead reference to a connection in the list for %s. Could be lingering disconnected, or could have been improperly removed.\n", host.c_str());
 			} else {
 				return con;
 			}

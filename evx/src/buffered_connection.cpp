@@ -13,9 +13,9 @@
 #include <ev.h>
 
 #include "evx.hpp"
-#include "buffer.hpp"
+#include "evx/buffer.hpp"
 
-#include "buffered_connection.hpp"
+#include "evx/buffered_connection.hpp"
 
 namespace evx
 {

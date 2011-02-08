@@ -1,4 +1,6 @@
 #include <sstream>
+#include <cstdio>
+#include <algorithm>
 
 #include "connection_finder.hpp"
 #include "connection_pool.hpp"
@@ -342,7 +344,7 @@ void connection_finder::socket_close(buffered_connection &con, int err)
 {
 	unregister_connection(con);
 	if (err)
-		printf("Waiting socket closed due to error, errno: 0x%x\n", err);
+                std::printf("Waiting socket closed due to error, errno: 0x%x\n", err);
 }
 
 void connection_finder::error(evx::buffered_connection &con, int error_number, const std::string &name, const std::string &text)

@@ -2,6 +2,7 @@
 #define __SIMPLE_STATS_DRIVER_GUARD__
 
 #include <tr1/unordered_map>
+#include <string>
 #include <map>
 
 // Generic class for holding and updating simple incremental counters: 
