@@ -19,6 +19,7 @@
 #include "connection_pool.hpp"
 #include "chat_handler.hpp"
 #include "util.hpp"
+#include "config.hpp"
 
 using namespace evx;
 
@@ -27,10 +28,17 @@ int usage(const std::string &exec_name)
 	std::cout << exec_name << " [-h] [-s secret_key_file] [-i info-host] [address1]:[port1] .. [addressN]:[portN]" << std::endl;
 	std::cout << std::endl;
 	std::cout << "\t-h\tShow this help screen." << std::endl;
+        std::cout << "\t-v\tShow cloudbridge version (" << CONFIG_VERSION << ")." << std::endl;
 	std::cout << "\t-s\tFile that contains timestamp:secret_key pairs" << std::endl;
 	std::cout << "\t-i\tVirtual host that can be queried for status information" << std::endl;
 	
 	return 1;
+}
+
+int version()
+{
+        std::cout << CONFIG_VERSION << std::endl;
+        return 1;
 }
 
 typedef std::map<int, std::string> secret_map;
@@ -58,7 +66,7 @@ int main(int argc, char **argv)
 	std::string exename = argv[0];
 	
 	char flag;
-	while ((flag = getopt(argc, argv, "s:i:h")) != -1)
+        while ((flag = getopt(argc, argv, "s:i:hv")) != -1)
 	{
 		switch (flag)
 		{
@@ -70,6 +78,10 @@ int main(int argc, char **argv)
 			info_host = optarg;
 			break;
 			
+                case 'v':
+                        return version();
+                        break;
+
 		case 'h':
 		case '?':
 		default:

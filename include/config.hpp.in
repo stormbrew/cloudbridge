@@ -1,0 +1,9 @@
+#ifndef __CONFIG_GUARD__
+#define __CONFIG_GUARD__
+
+#define CONFIG_VERSION_MAJOR @cloudbridge_VERSION_MAJOR@
+#define CONFIG_VERSION_MINOR @cloudbridge_VERSION_MINOR@
+
+#define CONFIG_VERSION "@cloudbridge_VERSION_MAJOR@.@cloudbridge_VERSION_MINOR@"
+
+#endif // __CONFIG_GUARD__
