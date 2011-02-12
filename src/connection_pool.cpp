@@ -59,19 +59,26 @@ connection_pool::add_known_key(const std::string &host_part)
 std::string
 connection_pool::find_key(const std::string &host) const
 {
-	// TODO: Make this more efficient than a linear scan.
+        // TODO: Make this more efficient than a linear scan. Especially a linear scan of all keys.
+        known_key_set::iterator longest = known_keys.end();
 	for (known_key_set::iterator it = known_keys.begin(); it != known_keys.end(); it++)
 	{
 		if (*it == host)
 			return *it;
+
+                if (longest != known_keys.end() && it->length() < longest->length())
+                        continue; // skip if we've already found a longer one.
 		
 		std::string prefixed_host = ".";
 		prefixed_host += *it;
 
-		if (prefixed_host.length() >= it->length() && std::equal(prefixed_host.rbegin(), prefixed_host.rend(), host.rbegin()))
-			return *it;		
+                if (prefixed_host.length() >= it->length() && std::equal(prefixed_host.rbegin(), prefixed_host.rend(), host.rbegin()))
+                        longest = it;
 	}
-	return "";
+        if (longest != known_keys.end())
+            return *longest;
+
+        return "";
 }
 
 void
