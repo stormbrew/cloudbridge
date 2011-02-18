@@ -15,10 +15,13 @@ void chat_handler::timeout(evx::buffered_connection &con)
 {
 	// timeout means the backend failed. Close our connection and let the other end rebind elsewhere.
 	buffered_connection::ptr other_ptr = other.lock();
-	std::tr1::shared_ptr<connection_finder> other_finder = other_ptr->get_client_handler<connection_finder>();
-	other_finder->find_connection(*other_ptr);
-	other = buffered_connection::weak_ptr();
-	con.error_close(0);	
+        if (other_ptr && !other_ptr->closed())
+        {
+            std::tr1::shared_ptr<connection_finder> other_finder = other_ptr->get_client_handler<connection_finder>();
+            other_finder->find_connection(*other_ptr);
+        }
+        other = buffered_connection::weak_ptr();
+        con.error_close(0);
 }
 
 void chat_handler::data_readable(buffered_connection &con)
