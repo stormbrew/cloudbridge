@@ -2,6 +2,7 @@
 #include <netdb.h>
 #include <netinet/in.h>
 #include <unistd.h>
+#include <fcntl.h>
 #include <errno.h>
 #include <iostream>
 #include <fstream>
@@ -162,6 +163,12 @@ int main(int argc, char **argv)
 
 			int on = 1;
 			setsockopt(listen_socket, SOL_SOCKET, SO_REUSEADDR, &on, sizeof(on));
+
+			// go into nonblocking mode
+			int flags;
+			if (-1 == (flags = fcntl(listen_socket, F_GETFL, 0)))
+				flags = 0;
+		   	fcntl(listen_socket, F_SETFL, flags | O_NONBLOCK);
 
 			if (bind(listen_socket, addrinfo->ai_addr, addrinfo->ai_addrlen))
 			{
