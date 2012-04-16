@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <errno.h>
+#include <signal.h>
 #include <iostream>
 #include <fstream>
 #include <cstdio>
@@ -191,6 +192,9 @@ int main(int argc, char **argv)
 	}	
 	
 	buffered_connection::register_cleanup(loop);
+
+	// Ignore SIGPIPE signals (they should get handled by the event loop)
+	signal(SIGPIPE, SIG_IGN);
 	
 	ev_loop(loop, 0);
 }
